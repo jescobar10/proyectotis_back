@@ -38,15 +38,14 @@ const usuarioSchema = new Schema( {
     rol: {
         type: String,
         required: [ true, 'El Rol es necesario ']
-    },
-
-    usuarioPlataforma: {
-        type: String
-    },
-
+    },  
     password: {
         type: String,
         required: [ true, 'La contraseña es necesaria ']
+    },
+
+    activo: {
+        type: Boolean
     }
 
     // fechaNacimiento: {
@@ -81,8 +80,9 @@ interface Iusuario extends Document {
     telefono: String;
     email: String;
     rol: String;
-    usuarioPlataforma: String;
+    //usuarioPlataforma: String;
     password: String;
+    activo: boolean
     //fechaNacimiento: Date;
     //avatar: String
 

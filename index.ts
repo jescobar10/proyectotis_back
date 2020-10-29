@@ -1,7 +1,12 @@
 import Server from './classes/server';
+
+//Modulos 
 import userRoutes from './routes/usuario';
+import avanceObraRoutes from './routes/avanceObra'; 
+
 import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
+
 
 const server = new Server();
 
@@ -9,8 +14,9 @@ const server = new Server();
 server.app.use( bodyParser.urlencoded({ extended: true }));
 server.app.use( bodyParser.json());
 
-//Definir la ruta
+//Definición de las rutas
 server.app.use('/user', userRoutes );
+server.app.use('/avanceObra', avanceObraRoutes );
 
 //Conectar con base de datos
 mongoose.connect('mongodb://localhost:27017/bdtis', 

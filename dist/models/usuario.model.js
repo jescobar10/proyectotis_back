@@ -35,12 +35,12 @@ const usuarioSchema = new mongoose_1.Schema({
         type: String,
         required: [true, 'El Rol es necesario ']
     },
-    usuarioPlataforma: {
-        type: String
-    },
     password: {
         type: String,
         required: [true, 'La contraseña es necesaria ']
+    },
+    activo: {
+        type: Boolean
     }
     // fechaNacimiento: {
     //     type: Date        

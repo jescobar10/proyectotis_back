@@ -1,4 +1,12 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -7,9 +15,28 @@ const express_1 = require("express");
 const usuario_model_1 = require("../models/usuario.model");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const token_1 = __importDefault(require("../classes/token"));
-const autenticacion_1 = require("../middlewares/autenticacion");
 const userRoutes = express_1.Router();
-//Servicio Crear Usuario 
+//Listar usuarios paginados
+userRoutes.get('/', (req, res) => __awaiter(this, void 0, void 0, function* () {
+    //Se solicita el numero de pagina , parametro opcional
+    let pagina = Number(req.query.pagina) || 1;
+    let skip = pagina - 1;
+    skip = skip * 10;
+    const body = req.body;
+    const usuarios = yield usuario_model_1.Usuario.find({ activo: body.activo })
+        //Muestra ordenado por nombre
+        .sort({ nombre: 1 })
+        .skip(skip)
+        //Se pagina de 10 en 10 
+        .limit(10)
+        .exec();
+    res.json({
+        ok: true,
+        pagina,
+        usuarios
+    });
+}));
+//Servicio Crear Usuario  .
 userRoutes.post('/create', (req, res) => {
     const user = {
         documento: req.body.documento,
@@ -22,6 +49,9 @@ userRoutes.post('/create', (req, res) => {
         usuarioPlataforma: req.body.usuarioPlataforma,
         //Encriptamos el password y lo pasamos por 10 vueltas 
         password: bcrypt_1.default.hashSync(req.body.password, 10),
+        activo: req.body.activo
+        //fechaNacimiento,
+        //avatar
     };
     //Login 
     userRoutes.post('/login', (req, res) => {
@@ -89,7 +119,8 @@ userRoutes.post('/create', (req, res) => {
     });
 });
 //Actualizar Usuario
-userRoutes.post('/update', autenticacion_1.verificaToken, (req, res) => {
+userRoutes.post('/update', (req, res) => {
+    //userRoutes.post('/update', verificaToken,  (req: any, res: Response) => {
     const user = {
         documento: req.body.documento || req.usuario.documento,
         nombre: req.body.nombre || req.usuario.nombre,

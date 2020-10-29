@@ -6,7 +6,35 @@ import { verificaToken } from '../middlewares/autenticacion';
 
 const userRoutes = Router();
 
-//Servicio Crear Usuario 
+//Listar usuarios paginados
+userRoutes.get('/', async ( req: Request, res: Response ) =>{
+
+    //Se solicita el numero de pagina , parametro opcional
+    let pagina = Number(req.query.pagina) || 1;
+    let skip = pagina -1;
+    skip = skip * 10;
+
+    const body = req.body;
+
+    const usuarios =  await Usuario.find( {activo: body.activo} )
+                                    //Muestra ordenado por nombre
+                                    .sort( { nombre: 1 } )
+                                    .skip( skip )
+                                    //Se pagina de 10 en 10 
+                                    .limit(10)
+                                    .exec();
+
+    res.json({
+        ok: true,
+        pagina,
+        usuarios
+    });
+
+
+});
+
+
+//Servicio Crear Usuario  .
 userRoutes.post('/create', ( req: Request, res: Response ) =>{
 
     const user = {
@@ -20,6 +48,7 @@ userRoutes.post('/create', ( req: Request, res: Response ) =>{
         usuarioPlataforma : req.body.usuarioPlataforma,
         //Encriptamos el password y lo pasamos por 10 vueltas 
         password          : bcrypt.hashSync( req.body.password, 10),
+        activo            : req.body.activo
         //fechaNacimiento,
         //avatar
     };
@@ -106,7 +135,8 @@ userRoutes.post('/create', ( req: Request, res: Response ) =>{
 
 
 //Actualizar Usuario
-userRoutes.post('/update', verificaToken,  (req: any, res: Response) => {
+userRoutes.post('/update', (req: any, res: Response) => {
+    //userRoutes.post('/update', verificaToken,  (req: any, res: Response) => {
 
     const user = {
         documento: req.body.documento || req.usuario.documento,
@@ -153,6 +183,42 @@ userRoutes.post('/update', verificaToken,  (req: any, res: Response) => {
     });
 
    
+});
+
+
+//Eliminar Usuario
+//En este caso no se eleiminara el registro si no que se pondra en un estado de inactivo
+userRoutes.post('/delete', (req: any, res: Response) => {
+    //userRoutes.post('/delete', verificaToken,  (req: any, res: Response) => {
+
+    const user = {
+        documento: req.body.documento || req.usuario.documento,        
+        activo: req.body.activo || req.usuario.activo
+    }
+
+    // Se entrega la información para actualizar el campo activo a false
+    Usuario.findByIdAndUpdate( req.usuario._id, user, { new: true }, ( err, userDB) => {
+        
+        if( err ) throw err;
+
+        if( !userDB  ) {
+            return res.json({
+                ok: false,
+                mensaje: 'No existe un usuario con ese ID'
+            });
+        }
+
+        const tokenUser = Token.getJwtToken({
+            _id: userDB._id,
+                    documento: userDB.documento,
+                    activo: false  
+        });
+
+        res.json({
+            ok: true,
+            token: tokenUser
+        });
+    });   
 });
 
 //Se exporta 
