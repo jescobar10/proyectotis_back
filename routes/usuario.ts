@@ -44,8 +44,7 @@ userRoutes.post('/create', ( req: Request, res: Response ) =>{
         genero            : req.body.genero,
         telefono          : req.body.telefono,
         email             : req.body.email,
-        rol               : req.body.rol,
-        usuarioPlataforma : req.body.usuarioPlataforma,
+        rol               : req.body.rol,     
         //Encriptamos el password y lo pasamos por 10 vueltas 
         password          : bcrypt.hashSync( req.body.password, 10),
         activo            : req.body.activo
@@ -81,8 +80,7 @@ userRoutes.post('/create', ( req: Request, res: Response ) =>{
                     genero: userDB.genero,
                     telefono: userDB.telefono,
                     email: userDB.email,
-                    rol: userDB.rol,
-                    //usuarioPlataforma: userDB.usuarioPlataforma,
+                    rol: userDB.rol,                   
                     password: userDB.password                  
 
                 });
@@ -114,8 +112,7 @@ userRoutes.post('/create', ( req: Request, res: Response ) =>{
                     genero: userDB.genero,
                     telefono: userDB.telefono,
                     email: userDB.email,
-                    rol: userDB.rol,
-                    //usuarioPlataforma: userDB.usuarioPlataforma,
+                    rol: userDB.rol,                 
                     password: userDB.password    
         });
 
@@ -145,8 +142,7 @@ userRoutes.post('/update', (req: any, res: Response) => {
         genero: req.body.genero || req.usuario.genero,
         telefono: req.body.telefono || req.usuario.telefono,
         email: req.body.email || req.usuario.email,
-        rol: req.body.rol || req.usuario.rol,
-       // usuarioPlataforma: req.body.usuarioPlataforma || req.usuario.usuarioPlataforma,
+        rol: req.body.rol || req.usuario.rol,      
         password: req.body.password || req.usuario.password
     }
 
@@ -170,8 +166,7 @@ userRoutes.post('/update', (req: any, res: Response) => {
                     genero: userDB.genero,
                     telefono: userDB.telefono,
                     email: userDB.email,
-                    rol: userDB.rol,
-                   // usuarioPlataforma: userDB.usuarioPlataforma,
+                    rol: userDB.rol,                   
                     password: userDB.password    
         });
 

@@ -7,6 +7,7 @@ import avanceObraRoutes from './routes/avanceObra';
 import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
 
+import cors from 'cors';
 
 const server = new Server();
 
@@ -17,6 +18,9 @@ server.app.use( bodyParser.json());
 //Definición de las rutas
 server.app.use('/user', userRoutes );
 server.app.use('/avanceObra', avanceObraRoutes );
+
+//Configuración del CORS
+server.app.use( cors({ origin: true, credentials: true }) );
 
 //Conectar con base de datos
 mongoose.connect('mongodb://localhost:27017/bdtis', 

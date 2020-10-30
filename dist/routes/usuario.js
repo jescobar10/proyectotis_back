@@ -46,7 +46,6 @@ userRoutes.post('/create', (req, res) => {
         telefono: req.body.telefono,
         email: req.body.email,
         rol: req.body.rol,
-        usuarioPlataforma: req.body.usuarioPlataforma,
         //Encriptamos el password y lo pasamos por 10 vueltas 
         password: bcrypt_1.default.hashSync(req.body.password, 10),
         activo: req.body.activo
@@ -77,7 +76,6 @@ userRoutes.post('/create', (req, res) => {
                     telefono: userDB.telefono,
                     email: userDB.email,
                     rol: userDB.rol,
-                    usuarioPlataforma: userDB.usuarioPlataforma,
                     password: userDB.password
                 });
                 res.json({
@@ -104,7 +102,6 @@ userRoutes.post('/create', (req, res) => {
             telefono: userDB.telefono,
             email: userDB.email,
             rol: userDB.rol,
-            usuarioPlataforma: userDB.usuarioPlataforma,
             password: userDB.password
         });
         res.json({
@@ -129,7 +126,6 @@ userRoutes.post('/update', (req, res) => {
         telefono: req.body.telefono || req.usuario.telefono,
         email: req.body.email || req.usuario.email,
         rol: req.body.rol || req.usuario.rol,
-        usuarioPlataforma: req.body.usuarioPlataforma || req.usuario.usuarioPlataforma,
         password: req.body.password || req.usuario.password
     };
     // Se entrega la información para actualizar 
@@ -151,8 +147,36 @@ userRoutes.post('/update', (req, res) => {
             telefono: userDB.telefono,
             email: userDB.email,
             rol: userDB.rol,
-            usuarioPlataforma: userDB.usuarioPlataforma,
             password: userDB.password
+        });
+        res.json({
+            ok: true,
+            token: tokenUser
+        });
+    });
+});
+//Eliminar Usuario
+//En este caso no se eleiminara el registro si no que se pondra en un estado de inactivo
+userRoutes.post('/delete', (req, res) => {
+    //userRoutes.post('/delete', verificaToken,  (req: any, res: Response) => {
+    const user = {
+        _id: req.body._id || req.usuario._id,
+        activo: req.body.activo || req.usuario.activo
+    };
+    // Se entrega la información para actualizar el campo activo a false
+    usuario_model_1.Usuario.findByIdAndUpdate(req.usuario._id, user, { new: true }, (err, userDB) => {
+        if (err)
+            throw err;
+        if (!userDB) {
+            return res.json({
+                ok: false,
+                mensaje: 'No existe un usuario con ese ID'
+            });
+        }
+        const tokenUser = token_1.default.getJwtToken({
+            _id: userDB._id,
+            documento: userDB.documento,
+            activo: false
         });
         res.json({
             ok: true,
