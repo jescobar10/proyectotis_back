@@ -82,7 +82,7 @@ userRoutes.post('/create', ( req: Request, res: Response ) =>{
                     telefono: userDB.telefono,
                     email: userDB.email,
                     rol: userDB.rol,
-                    usuarioPlataforma: userDB.usuarioPlataforma,
+                    //usuarioPlataforma: userDB.usuarioPlataforma,
                     password: userDB.password                  
 
                 });
@@ -115,7 +115,7 @@ userRoutes.post('/create', ( req: Request, res: Response ) =>{
                     telefono: userDB.telefono,
                     email: userDB.email,
                     rol: userDB.rol,
-                    usuarioPlataforma: userDB.usuarioPlataforma,
+                    //usuarioPlataforma: userDB.usuarioPlataforma,
                     password: userDB.password    
         });
 
@@ -146,7 +146,7 @@ userRoutes.post('/update', (req: any, res: Response) => {
         telefono: req.body.telefono || req.usuario.telefono,
         email: req.body.email || req.usuario.email,
         rol: req.body.rol || req.usuario.rol,
-        usuarioPlataforma: req.body.usuarioPlataforma || req.usuario.usuarioPlataforma,
+       // usuarioPlataforma: req.body.usuarioPlataforma || req.usuario.usuarioPlataforma,
         password: req.body.password || req.usuario.password
     }
 
@@ -171,7 +171,7 @@ userRoutes.post('/update', (req: any, res: Response) => {
                     telefono: userDB.telefono,
                     email: userDB.email,
                     rol: userDB.rol,
-                    usuarioPlataforma: userDB.usuarioPlataforma,
+                   // usuarioPlataforma: userDB.usuarioPlataforma,
                     password: userDB.password    
         });
 
@@ -192,7 +192,7 @@ userRoutes.post('/delete', (req: any, res: Response) => {
     //userRoutes.post('/delete', verificaToken,  (req: any, res: Response) => {
 
     const user = {
-        documento: req.body.documento || req.usuario.documento,        
+        _id: req.body._id || req.usuario._id,        
         activo: req.body.activo || req.usuario.activo
     }
 

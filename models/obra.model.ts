@@ -27,7 +27,8 @@ const obraSchema = new Schema( {
        type: Date,
        required: [ true, 'La fecha de Finalización de la obra es necesaria.']
    },
-
+   
+   //PDF
    regPlano: {
         type: String
    },
