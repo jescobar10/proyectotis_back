@@ -41,7 +41,7 @@ const obraSchema = new Schema( {
 
 
 //Se define la interfaz de Obra
-interface Iobras extends Document {
+interface Iobra extends Document {
     codigo: String; 
     identObra: String;
     nombreObra: String;
@@ -55,4 +55,4 @@ interface Iobras extends Document {
 
 
 //Se exporta el modelo de Obra
-export const Obra = model<Iobras>('Obras', obraSchema);
+export const Obra = model<Iobra>('Obra', obraSchema);

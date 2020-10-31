@@ -51,7 +51,7 @@ const clienteSchema = new Schema( {
 
 
 //Se define la interfaz de Clientes
-interface Iclientes extends Document {
+interface Icliente extends Document {
     tipo: String; 
     identificacion: String;
     nombre:  String;   
@@ -64,4 +64,4 @@ interface Iclientes extends Document {
 
 
 //Se exporta el modelo de Clientes
-export const Cliente = model<Iclientes>('Cliente', clienteSchema);
+export const Cliente = model<Icliente>('Cliente', clienteSchema);

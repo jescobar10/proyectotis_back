@@ -79,12 +79,10 @@ interface Iusuario extends Document {
     genero: String;
     telefono: String;
     email: String;
-    rol: String;
-    //usuarioPlataforma: String;
+    rol: String;  
     password: String;
     activo: boolean
-    //fechaNacimiento: Date;
-    //avatar: String
+   
 
     //Se declara en la interfaz para acceder desde afuera 
     compararPassword(password: string): boolean;

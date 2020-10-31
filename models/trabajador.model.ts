@@ -54,7 +54,7 @@ const trabajadorSchema = new Schema( {
 
 
 //Se define la interfaz de Trabajadores
-interface Itrabajadores extends Document {
+interface Itrabajador extends Document {
     documento: String;
     nombre:  String;
     apellido: String;
@@ -70,4 +70,4 @@ interface Itrabajadores extends Document {
 
 
 //Se exporta el modelo de Trabajador
-export const Trabajador = model<Itrabajadores>('Trabajador', trabajadorSchema);
+export const Trabajador = model<Itrabajador>('Trabajador', trabajadorSchema);
