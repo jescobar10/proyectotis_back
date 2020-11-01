@@ -41,8 +41,7 @@ const obraSchema = new Schema( {
 
 
 //Se define la interfaz de Obra
-interface Iobra extends Document {
-    codigo: String; 
+interface Iobra extends Document {    
     identObra: String;
     nombreObra: String;
     descripcion:  String;

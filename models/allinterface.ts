@@ -52,8 +52,7 @@ interface Cliente {
 }
 
 //Interfaz modulo de Obra
-interface Iobra {
-    codigo: String; 
+interface obra {   
     identObra: String;
     nombreObra: String;
     descripcion:  String;
@@ -68,7 +67,8 @@ interface Material {
     codigo: String; 
     referencia: String;
     unidadMedida: String;
-    precio: number       
+    precio: number;
+    activo: boolean
 }
 
 //Interface Modelo avance de obra

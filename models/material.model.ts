@@ -20,6 +20,10 @@ const materialSchema = new Schema( {
    precio: {
        type:Number,
        required: [ true, 'El precio o valor del material es necesario.']
+   },
+
+   activo: {
+       type: Boolean
    }
 
 });
@@ -30,7 +34,8 @@ interface Imateriales extends Document {
     codigo: String; 
     referencia: String;
     unidadMedida: String;
-    precio: number       
+    precio: number;
+    activo: boolean;      
 }
 
 

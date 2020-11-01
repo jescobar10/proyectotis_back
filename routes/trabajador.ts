@@ -14,7 +14,7 @@ trabajadorRoutes.get('/', async ( req: Request, res: Response ) =>{
 
     const body = req.body;
 
-    const usuarios =  await Trabajador.find( {activo: body.activo} )
+    const trabajadores =  await Trabajador.find( {activo: body.activo} )
                                     //Muestra ordenado por nombre
                                     .sort( { nombre: 1 } )
                                     .skip( skip )
@@ -25,7 +25,7 @@ trabajadorRoutes.get('/', async ( req: Request, res: Response ) =>{
     res.json({
         ok: true,
         pagina,
-        usuarios
+        trabajadores
     });
 });
 
@@ -129,7 +129,7 @@ trabajadorRoutes.post('/update', (req: any, res: Response) => {
     });   
 });
 
-//Eliminar Usuario
+//Eliminar Trabajador
 //En este caso no se eliminara el registro si no que se pondra en un estado de inactivo
 trabajadorRoutes.post('/delete', (req: any, res: Response) => {
     //userRoutes.post('/delete', verificaToken,  (req: any, res: Response) => {
@@ -166,5 +166,3 @@ trabajadorRoutes.post('/delete', (req: any, res: Response) => {
 
 //Se exporta la ruta de trabajadores
 export default trabajadorRoutes;
-
-
