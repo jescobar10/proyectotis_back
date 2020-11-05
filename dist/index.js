@@ -21,7 +21,7 @@ server.app.use('/avanceObra', avanceObra_1.default);
 server.app.use(cors_1.default({ origin: true, credentials: true }));
 //Conectar con base de datos
 mongoose_1.default.connect('mongodb://localhost:27017/bdtis', {
-    useNewUrlParser: true, useCreateIndex: true
+    useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true
 }, (err) => {
     if (err)
         throw err;

@@ -16,7 +16,7 @@
         "express": "^4.17.1",
         "express-fileupload": "^1.2.0",
         "jsonwebtoken": "^8.5.1",
-        "mongoose": "^5.10.9"
+        "mongoose": "^5.10.12"
     },
     "devDependencies": {
         "@types/bcrypt": "^3.0.0",

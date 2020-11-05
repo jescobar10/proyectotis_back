@@ -31,4 +31,4 @@ const obraSchema = new mongoose_1.Schema({
     }
 });
 //Se exporta el modelo de Obra
-exports.Obra = mongoose_1.model('Obras', obraSchema);
+exports.Obra = mongoose_1.model('Obra', obraSchema);

@@ -17,6 +17,9 @@ const materialSchema = new mongoose_1.Schema({
     precio: {
         type: Number,
         required: [true, 'El precio o valor del material es necesario.']
+    },
+    activo: {
+        type: Boolean
     }
 });
 //Se exporta el modelo de Material

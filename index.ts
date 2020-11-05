@@ -25,7 +25,7 @@ server.app.use( cors({ origin: true, credentials: true }) );
 //Conectar con base de datos
 mongoose.connect('mongodb://localhost:27017/bdtis', 
 {
-    useNewUrlParser: true, useCreateIndex: true }, ( err ) => {
+    useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true }, ( err ) => {
 
         if ( err ) throw err;
 
