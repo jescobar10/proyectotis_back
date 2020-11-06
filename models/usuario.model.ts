@@ -81,8 +81,7 @@ interface Iusuario extends Document {
     email: String;
     rol: String;  
     password: String;
-    activo: boolean
-   
+    activo: boolean   
 
     //Se declara en la interfaz para acceder desde afuera 
     compararPassword(password: string): boolean;

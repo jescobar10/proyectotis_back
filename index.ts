@@ -1,11 +1,10 @@
 import Server from './classes/server';
+import mongoose from 'mongoose';
+import bodyParser from 'body-parser';
 
 //Modulos 
 import userRoutes from './routes/usuario';
 import avanceObraRoutes from './routes/avanceObra'; 
-
-import mongoose from 'mongoose';
-import bodyParser from 'body-parser';
 
 import cors from 'cors';
 
@@ -15,12 +14,12 @@ const server = new Server();
 server.app.use( bodyParser.urlencoded({ extended: true }));
 server.app.use( bodyParser.json());
 
+//Configuración del CORS
+server.app.use( cors({ origin: true, credentials: true }) );
+
 //Definición de las rutas
 server.app.use('/user', userRoutes );
 server.app.use('/avanceObra', avanceObraRoutes );
-
-//Configuración del CORS
-server.app.use( cors({ origin: true, credentials: true }) );
 
 //Conectar con base de datos
 mongoose.connect('mongodb://localhost:27017/bdtis', 
@@ -34,7 +33,8 @@ mongoose.connect('mongodb://localhost:27017/bdtis',
 
 //Se levanta express
 server.start( () => {
-    console.log(`Servidor corriendo en puerto ${ server.port }`);
+    console.log(`Servidor corriendo en puerto ${ server.port }`); 
+
 } );
 
 
