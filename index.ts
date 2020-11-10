@@ -7,6 +7,11 @@ import userRoutes from './routes/usuario';
 import avanceObraRoutes from './routes/avanceObra'; 
 
 import cors from 'cors';
+import clienteRoutes from './routes/cliente';
+import materialRoutes from './routes/material';
+import obraRoutes from './routes/obra';
+import proveedorRoutes from './routes/proveedor';
+import trabajadorRoutes from './routes/trabajador';
 
 const server = new Server();
 
@@ -20,6 +25,11 @@ server.app.use( cors({ origin: true, credentials: true }) );
 //Definición de las rutas
 server.app.use('/user', userRoutes );
 server.app.use('/avanceObra', avanceObraRoutes );
+server.app.use('/cliente', clienteRoutes );
+server.app.use('/material', materialRoutes );
+server.app.use('/obra', obraRoutes );
+server.app.use('/proveedor', proveedorRoutes );
+server.app.use('/Trabajador', trabajadorRoutes );
 
 //Conectar con base de datos
 mongoose.connect('mongodb://localhost:27017/bdtis', 
