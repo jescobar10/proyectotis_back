@@ -28,7 +28,7 @@ server.app.use('/cliente', cliente_1.default);
 server.app.use('/material', material_1.default);
 server.app.use('/obra', obra_1.default);
 server.app.use('/proveedor', proveedor_1.default);
-server.app.use('/Trabajador', trabajador_1.default);
+server.app.use('/trabajador', trabajador_1.default);
 //Conectar con base de datos
 mongoose_1.default.connect('mongodb://localhost:27017/bdtis', {
     useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true

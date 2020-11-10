@@ -29,7 +29,7 @@ server.app.use('/cliente', clienteRoutes );
 server.app.use('/material', materialRoutes );
 server.app.use('/obra', obraRoutes );
 server.app.use('/proveedor', proveedorRoutes );
-server.app.use('/Trabajador', trabajadorRoutes );
+server.app.use('/trabajador', trabajadorRoutes );
 
 //Conectar con base de datos
 mongoose.connect('mongodb://localhost:27017/bdtis', 
