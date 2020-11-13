@@ -16,7 +16,7 @@ userRoutes.get('/', async ( req: Request, res: Response ) =>{
 
     const body = req.body;
 
-    const usuarios =  await Usuario.find( {activo: body.activo} )
+    const usuarios =  await Usuario.find( {activo: true} )
                                     //Muestra ordenado por nombre
                                     .sort( { nombre: 1 } )
                                     .skip( skip )
@@ -57,7 +57,8 @@ userRoutes.get('/:email', (req: Request, res: Response) => {
                 telefono: userDB.telefono,
                 email: userDB.email,
                 rol: userDB.rol,                   
-                password: userDB.password                  
+                password: userDB.password,
+                activo: userDB.activo              
             };
 
             res.json ({
@@ -182,7 +183,7 @@ userRoutes.post('/update', (req: any, res: Response) => {
         apellido: req.body.apellido || req.usuario.apellido,
         genero: req.body.genero || req.usuario.genero,
         telefono: req.body.telefono || req.usuario.telefono,
-        email: req.body.email || req.usuario.email,
+        //email: req.body.email || req.usuario.email,
         rol: req.body.rol || req.usuario.rol,      
         password: req.body.password || req.usuario.password
     }
@@ -195,12 +196,12 @@ userRoutes.post('/update', (req: any, res: Response) => {
         if( !userDB  ) {
             return res.json({
                 ok: false,
-                mensaje: 'Noexiste un usuario con ese ID'
+                mensaje: 'No existe un usuario con ese ID'
             });
         }
 
         const tokenUser = Token.getJwtToken({
-            _id: userDB._id,
+                    _id: userDB._id,
                     documento: userDB.documento,
                     nombre: userDB.nombre,
                     apellido: userDB.apellido,
