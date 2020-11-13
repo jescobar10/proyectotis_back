@@ -30,7 +30,48 @@ userRoutes.get('/', async ( req: Request, res: Response ) =>{
         usuarios
     });
 
+});
 
+//Retornar usuario por email
+userRoutes.get('/:email', (req: Request, res: Response) => {
+    let email = req.params.email;
+    Usuario.findOne({email : email}, (err,userDB) => {
+        if(err)
+            throw err;
+
+        if(!userDB){
+            return res.json({
+                ok: false,
+                mensaje: `No existe usuario con documento ${email}`
+            });
+        }
+
+        if( userDB.activo) {
+
+            let persona = {
+                _id: userDB._id,
+                documento: userDB.documento,
+                nombre: userDB.nombre,
+                apellido: userDB.apellido,
+                genero: userDB.genero,
+                telefono: userDB.telefono,
+                email: userDB.email,
+                rol: userDB.rol,                   
+                password: userDB.password                  
+            };
+
+            res.json ({
+              ok: true,
+              usuario: persona
+            });
+
+        }else {
+            return res.json({
+                ok: false,
+                mensaje: `El usuario con documento ${email} no esta activo`
+            });
+        }      
+    });
 });
 
 
@@ -187,7 +228,7 @@ userRoutes.post('/delete', (req: any, res: Response) => {
     //userRoutes.post('/delete', verificaToken,  (req: any, res: Response) => {
 
     const user = {
-        _id: req.body._id || req.usuario._id,        
+        _id: req.body.email || req.usuario.email,        
         activo: req.body.activo || req.usuario.activo
     }
 
