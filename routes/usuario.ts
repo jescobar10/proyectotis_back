@@ -172,11 +172,9 @@ userRoutes.post('/create', ( req: Request, res: Response ) =>{
 });
 
 
-
 //Actualizar Usuario
 userRoutes.post('/update', (req: any, res: Response) => {
     //userRoutes.post('/update', verificaToken,  (req: any, res: Response) => {
-
     const user = {
         documento: req.body.documento || req.usuario.documento,
         nombre: req.body.nombre || req.usuario.nombre,
@@ -185,7 +183,8 @@ userRoutes.post('/update', (req: any, res: Response) => {
         telefono: req.body.telefono || req.usuario.telefono,
         //email: req.body.email || req.usuario.email,
         rol: req.body.rol || req.usuario.rol,      
-        password: req.body.password || req.usuario.password
+        password: req.body.password || req.usuario.password,
+        activo: true
     }
 
     // Se entrega la información para actualizar 
@@ -228,9 +227,16 @@ userRoutes.post('/update', (req: any, res: Response) => {
 userRoutes.post('/delete', (req: any, res: Response) => {
     //userRoutes.post('/delete', verificaToken,  (req: any, res: Response) => {
 
-    const user = {
-        _id: req.body.email || req.usuario.email,        
-        activo: req.body.activo || req.usuario.activo
+    const user = {  
+        documento: req.body.documento || req.usuario.documento,
+        nombre: req.body.nombre || req.usuario.nombre,
+        apellido: req.body.apellido || req.usuario.apellido,
+        genero: req.body.genero || req.usuario.genero,
+        telefono: req.body.telefono || req.usuario.telefono,
+        //email: req.body.email || req.usuario.email,
+        rol: req.body.rol || req.usuario.rol,      
+        password: req.body.password || req.usuario.password,             
+        activo: false 
     }
 
     // Se entrega la información para actualizar el campo activo a false
@@ -243,20 +249,16 @@ userRoutes.post('/delete', (req: any, res: Response) => {
                 ok: false,
                 mensaje: 'No existe un usuario con ese ID'
             });
-        }
-
-        const tokenUser = Token.getJwtToken({
-            _id: userDB._id,
-                    documento: userDB.documento,
-                    activo: false  
-        });
+        }      
 
         res.json({
             ok: true,
-            token: tokenUser
+            mensaje: 'Se elimino o inactivo correctamente el usuario'
         });
     });   
 });
+
+
 
 //Se exporta 
 export default userRoutes;

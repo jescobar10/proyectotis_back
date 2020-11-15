@@ -198,8 +198,15 @@ userRoutes.post('/update', (req, res) => {
 userRoutes.post('/delete', (req, res) => {
     //userRoutes.post('/delete', verificaToken,  (req: any, res: Response) => {
     const user = {
-        _id: req.body.email || req.usuario.email,
-        activo: req.body.activo || req.usuario.activo
+        documento: req.body.documento || req.usuario.documento,
+        nombre: req.body.nombre || req.usuario.nombre,
+        apellido: req.body.apellido || req.usuario.apellido,
+        genero: req.body.genero || req.usuario.genero,
+        telefono: req.body.telefono || req.usuario.telefono,
+        //email: req.body.email || req.usuario.email,
+        rol: req.body.rol || req.usuario.rol,
+        password: req.body.password || req.usuario.password,
+        activo: false
     };
     // Se entrega la información para actualizar el campo activo a false
     usuario_model_1.Usuario.findByIdAndUpdate(req.usuario._id, user, { new: true }, (err, userDB) => {
@@ -211,14 +218,9 @@ userRoutes.post('/delete', (req, res) => {
                 mensaje: 'No existe un usuario con ese ID'
             });
         }
-        const tokenUser = token_1.default.getJwtToken({
-            _id: userDB._id,
-            documento: userDB.documento,
-            activo: false
-        });
         res.json({
             ok: true,
-            token: tokenUser
+            mensaje: 'Se elimino o inactivo correctamente el usuario'
         });
     });
 });
