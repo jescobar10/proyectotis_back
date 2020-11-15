@@ -26,7 +26,7 @@ const usuarioSchema = new Schema( {
     },
 
     telefono: {
-        type: Number    
+        type: String    
     },
 
     email: {
@@ -82,10 +82,8 @@ interface Iusuario extends Document {
     rol: String;  
     password: String;
     activo: boolean   
-
     //Se declara en la interfaz para acceder desde afuera 
     compararPassword(password: string): boolean;
-
 }
 
 
