@@ -16,7 +16,7 @@ userRoutes.get('/', async ( req: Request, res: Response ) =>{
 
     const body = req.body;
 
-    const usuarios =  await Usuario.find( {activo: true} )
+    const usuarios =  await Usuario.find( )
                                     //Muestra ordenado por nombre
                                     .sort( { nombre: 1 } )
                                     .skip( skip )
@@ -31,6 +31,7 @@ userRoutes.get('/', async ( req: Request, res: Response ) =>{
     });
 
 });
+
 
 //Retornar usuario por email
 userRoutes.get('/:email', (req: Request, res: Response) => {
@@ -224,41 +225,39 @@ userRoutes.post('/update', (req: any, res: Response) => {
 
 //Eliminar Usuario
 //En este caso no se eleiminara el registro si no que se pondra en un estado de inactivo
-userRoutes.post('/delete', (req: any, res: Response) => {
-    //userRoutes.post('/delete', verificaToken,  (req: any, res: Response) => {
+// userRoutes.post('/delete', (req: any, res: Response) => {
+//     //userRoutes.post('/delete', verificaToken,  (req: any, res: Response) => {
 
-    const user = {  
-        documento: req.body.documento || req.usuario.documento,
-        nombre: req.body.nombre || req.usuario.nombre,
-        apellido: req.body.apellido || req.usuario.apellido,
-        genero: req.body.genero || req.usuario.genero,
-        telefono: req.body.telefono || req.usuario.telefono,
-        //email: req.body.email || req.usuario.email,
-        rol: req.body.rol || req.usuario.rol,      
-        password: req.body.password || req.usuario.password,             
-        activo: false 
-    }
+//     const user = {  
+//         documento: req.body.documento || req.usuario.documento,
+//         nombre: req.body.nombre || req.usuario.nombre,
+//         apellido: req.body.apellido || req.usuario.apellido,
+//         genero: req.body.genero || req.usuario.genero,
+//         telefono: req.body.telefono || req.usuario.telefono,
+//         //email: req.body.email || req.usuario.email,
+//         rol: req.body.rol || req.usuario.rol,      
+//         password: req.body.password || req.usuario.password,             
+//         activo: false 
+//     }
 
-    // Se entrega la información para actualizar el campo activo a false
-    Usuario.findByIdAndUpdate( req.usuario._id, user, { new: true }, ( err, userDB) => {
+//     // Se entrega la información para actualizar el campo activo a false
+//     Usuario.findByIdAndUpdate( req.usuario._id, user, { new: true }, ( err, userDB) => {
         
-        if( err ) throw err;
+//         if( err ) throw err;
 
-        if( !userDB  ) {
-            return res.json({
-                ok: false,
-                mensaje: 'No existe un usuario con ese ID'
-            });
-        }      
+//         if( !userDB  ) {
+//             return res.json({
+//                 ok: false,
+//                 mensaje: 'No existe un usuario con ese ID'
+//             });
+//         }      
 
-        res.json({
-            ok: true,
-            mensaje: 'Se elimino o inactivo correctamente el usuario'
-        });
-    });   
-});
-
-
+//         res.json({
+//             ok: true,
+//             mensaje: 'Se elimino o inactivo correctamente el usuario'
+//         });
+//     });   
+// });
 
 //Se exporta 
 export default userRoutes;

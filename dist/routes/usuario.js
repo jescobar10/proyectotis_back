@@ -23,7 +23,7 @@ userRoutes.get('/', (req, res) => __awaiter(this, void 0, void 0, function* () {
     let skip = pagina - 1;
     skip = skip * 10;
     const body = req.body;
-    const usuarios = yield usuario_model_1.Usuario.find({ activo: true })
+    const usuarios = yield usuario_model_1.Usuario.find()
         //Muestra ordenado por nombre
         .sort({ nombre: 1 })
         .skip(skip)
@@ -164,7 +164,8 @@ userRoutes.post('/update', (req, res) => {
         telefono: req.body.telefono || req.usuario.telefono,
         //email: req.body.email || req.usuario.email,
         rol: req.body.rol || req.usuario.rol,
-        password: req.body.password || req.usuario.password
+        password: req.body.password || req.usuario.password,
+        activo: true
     };
     // Se entrega la información para actualizar 
     usuario_model_1.Usuario.findByIdAndUpdate(req.usuario._id, user, { new: true }, (err, userDB) => {
@@ -195,34 +196,33 @@ userRoutes.post('/update', (req, res) => {
 });
 //Eliminar Usuario
 //En este caso no se eleiminara el registro si no que se pondra en un estado de inactivo
-userRoutes.post('/delete', (req, res) => {
-    //userRoutes.post('/delete', verificaToken,  (req: any, res: Response) => {
-    const user = {
-        documento: req.body.documento || req.usuario.documento,
-        nombre: req.body.nombre || req.usuario.nombre,
-        apellido: req.body.apellido || req.usuario.apellido,
-        genero: req.body.genero || req.usuario.genero,
-        telefono: req.body.telefono || req.usuario.telefono,
-        //email: req.body.email || req.usuario.email,
-        rol: req.body.rol || req.usuario.rol,
-        password: req.body.password || req.usuario.password,
-        activo: false
-    };
-    // Se entrega la información para actualizar el campo activo a false
-    usuario_model_1.Usuario.findByIdAndUpdate(req.usuario._id, user, { new: true }, (err, userDB) => {
-        if (err)
-            throw err;
-        if (!userDB) {
-            return res.json({
-                ok: false,
-                mensaje: 'No existe un usuario con ese ID'
-            });
-        }
-        res.json({
-            ok: true,
-            mensaje: 'Se elimino o inactivo correctamente el usuario'
-        });
-    });
-});
+// userRoutes.post('/delete', (req: any, res: Response) => {
+//     //userRoutes.post('/delete', verificaToken,  (req: any, res: Response) => {
+//     const user = {  
+//         documento: req.body.documento || req.usuario.documento,
+//         nombre: req.body.nombre || req.usuario.nombre,
+//         apellido: req.body.apellido || req.usuario.apellido,
+//         genero: req.body.genero || req.usuario.genero,
+//         telefono: req.body.telefono || req.usuario.telefono,
+//         //email: req.body.email || req.usuario.email,
+//         rol: req.body.rol || req.usuario.rol,      
+//         password: req.body.password || req.usuario.password,             
+//         activo: false 
+//     }
+//     // Se entrega la información para actualizar el campo activo a false
+//     Usuario.findByIdAndUpdate( req.usuario._id, user, { new: true }, ( err, userDB) => {
+//         if( err ) throw err;
+//         if( !userDB  ) {
+//             return res.json({
+//                 ok: false,
+//                 mensaje: 'No existe un usuario con ese ID'
+//             });
+//         }      
+//         res.json({
+//             ok: true,
+//             mensaje: 'Se elimino o inactivo correctamente el usuario'
+//         });
+//     });   
+// });
 //Se exporta 
 exports.default = userRoutes;
