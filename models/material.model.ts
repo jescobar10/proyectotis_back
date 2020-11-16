@@ -34,8 +34,8 @@ interface Imateriales extends Document {
     codigo: String; 
     referencia: String;
     unidadMedida: String;
-    precio: number;
-    activo: boolean;      
+    precio: Number;
+    activo: Boolean;      
 }
 
 

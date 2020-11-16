@@ -24,7 +24,8 @@ const trabajadorSchema = new Schema( {
     },
 
     telefono: {
-        type: Number    
+        type: Number,
+        required: [true, 'El telefono es necesario para contactar al trabajador']
     },
 
     email: {
@@ -63,9 +64,8 @@ interface Itrabajador extends Document {
     email: String;
     direccion: string;
     cargo: String;
-    obra: String;   
+    //obra: String;   
     activo: boolean;
-     
 }
 
 

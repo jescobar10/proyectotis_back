@@ -8,7 +8,7 @@ interface usuario {
     email: String;
     rol: String;  
     password: String;
-    activo: boolean   
+    activo: Boolean   
 }
 
 //Interfaz modulo de Trabajadores
@@ -21,8 +21,8 @@ interface Trabajador {
     email: String;
     direccion: string;
     cargo: String;
-    obra: String;   
-    activo: boolean;     
+    //obra: String;   
+    activo: Boolean;     
 }
 
 //Interfaz modulo de Proveedor
@@ -33,9 +33,8 @@ interface Proveedor {
     repreLegal: String;
     telefono: String;
     email: String;
-    direccion: string;    
-    //obra: String;   
-    activo: boolean;     
+    direccion: string;
+    activo: Boolean;     
 }
 
 
@@ -46,9 +45,9 @@ interface Cliente {
     nombre:  String;   
     telefono: String;
     email: String;
-    direccion: string;    
+    direccion: String;    
     //obra: String;   
-    activo: boolean;     
+    activo: Boolean;     
 }
 
 //Interfaz modulo de Obra
@@ -58,8 +57,8 @@ interface obra {
     descripcion:  String;
     fechaInicio: Date;
     fechaFin: Date;
-    regPlano: Date;
-    activo: Date;         
+    regPlano: String;
+    activo: Boolean;         
 }
 
 //Iterfaz modelo de Materiales
@@ -67,18 +66,18 @@ interface Material {
     codigo: String; 
     referencia: String;
     unidadMedida: String;
-    precio: number;
-    activo: boolean
+    precio: Number;
+    activo: Boolean
 }
 
 //Interface Modelo avance de obra
 interface AvanceObra {
-    idObra: string;
+    idObra: String;
     fechaAvance: Date;
-    descripcion: string;
-    foto: string[];
-    coords: string;
-    plano: string;
-    usuario: string;
+    descripcion: String;
+    foto: String[];
+    coords: String;
+    plano: String;
+    usuario: String;
     created: Date;
 }

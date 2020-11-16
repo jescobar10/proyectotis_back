@@ -47,9 +47,8 @@ interface Iobra extends Document {
     descripcion:  String;
     fechaInicio: Date;
     fechaFin: Date;
-    regPlano: Date;
-    activo: Date;
-         
+    regPlano: String;
+    activo: Boolean;
 }
 
 

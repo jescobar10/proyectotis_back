@@ -47,13 +47,13 @@ avanceObraSchema.pre<IAvanceObra>('save', function( next ){
 });
 
 interface IAvanceObra extends Document {
-    idObra: string;
+    idObra: String;
     fechaAvance: Date;
-    descripcion: string;
-    foto: string[];
-    coords: string;
-    plano: string;
-    usuario: string;
+    descripcion: String;
+    foto: String[];
+    coords: String;
+    plano: String;
+    usuario: String;
     created: Date;
 }
 

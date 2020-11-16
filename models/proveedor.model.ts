@@ -38,15 +38,6 @@ const proveedorSchema = new Schema( {
         //required: [ true, 'El genero es necesario ']
     },
 
-    ciudad: {
-        type: String
-    },
-    
-    //Creo que esto va en un modulo donde se asignan obras a los clientes
-    // obra: {
-    //     type: String 
-    // },
-
     activo: {
         type: Boolean
     }
