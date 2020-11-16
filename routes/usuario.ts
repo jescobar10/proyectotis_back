@@ -95,55 +95,6 @@ userRoutes.post('/create', ( req: Request, res: Response ) =>{
         //avatar
     };
 
-    //Login 
-    userRoutes.post('/login', (req: Request, res: Response) => {
-        
-        const body = req.body;
-
-        //Traemos el usuario por la llave en este caso email
-        Usuario.findOne({ email: body.email }, (err, userDB ) => {
-
-            if( err ) throw err;
-
-            if( !userDB ) {
-                return res.json({
-                    ok: false,
-                    mensaje: 'Usuario/Contraseña no son correctos'
-                });
-            }
-
-            //Se utiliza el metodo comparar password
-            if( userDB.compararPassword( body.password )) {
-
-                const tokenUser = Token.getJwtToken({
-                    _id: userDB._id,
-                    documento: userDB.documento,
-                    nombre: userDB.nombre,
-                    apellido: userDB.apellido,
-                    genero: userDB.genero,
-                    telefono: userDB.telefono,
-                    email: userDB.email,
-                    rol: userDB.rol,                   
-                    password: userDB.password                  
-
-                });
-
-                res.json ({
-                  ok: true,
-                  token: tokenUser
-                });
-
-            }else {
-                return res.json({
-                    ok: false,
-                    mensaje: 'Usuario/Contraseña no son correctos ***'
-                });
-            }    
-
-        })
-
-    });
-
     //Se crea el usuario en Base de datos
     Usuario.create( user ).then( userDB => {
 
@@ -172,6 +123,54 @@ userRoutes.post('/create', ( req: Request, res: Response ) =>{
     });
 });
 
+//Login 
+userRoutes.post('/login', (req: Request, res: Response) => {
+        
+    const body = req.body;
+
+    //Traemos el usuario por la llave en este caso email
+    Usuario.findOne({ email: body.email }, (err, userDB ) => {
+
+        if( err ) throw err;
+
+        if( !userDB ) {
+            return res.json({
+                ok: false,
+                mensaje: 'Usuario/Contraseña no son correctos'
+            });
+        }
+
+        //Se utiliza el metodo comparar password
+        if( userDB.compararPassword( body.password )) {
+
+            const tokenUser = Token.getJwtToken({
+                _id: userDB._id,
+                documento: userDB.documento,
+                nombre: userDB.nombre,
+                apellido: userDB.apellido,
+                genero: userDB.genero,
+                telefono: userDB.telefono,
+                email: userDB.email,
+                rol: userDB.rol,                   
+                password: userDB.password                  
+
+            });
+
+            res.json ({
+              ok: true,
+              token: tokenUser
+            });
+
+        }else {
+            return res.json({
+                ok: false,
+                mensaje: 'Usuario/Contraseña no son correctos ***'
+            });
+        }    
+
+    })
+
+});
 
 //Actualizar Usuario
 userRoutes.post('/update', (req: any, res: Response) => {
