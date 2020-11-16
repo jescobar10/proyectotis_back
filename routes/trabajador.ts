@@ -41,7 +41,7 @@ trabajadorRoutes.post('/create', ( req: Request, res: Response ) =>{
         email             : req.body.email,
         direccion         : req.body.direccion,
         cargo             : req.body.cargo,
-        obra              : req.body.obra,
+        //obra              : req.body.obra,
         activo            : req.body.activo
        
     };
@@ -59,7 +59,7 @@ trabajadorRoutes.post('/create', ( req: Request, res: Response ) =>{
                     email: trabajadorDB.email,
                     direccion: trabajadorDB.direccion,
                     cargo: trabajadorDB.cargo,
-                    obra: trabajadorDB.obra,
+                    //obra: trabajadorDB.obra,
                     activo: trabajadorDB.activo                   
                      
         });
@@ -91,7 +91,7 @@ trabajadorRoutes.post('/update', (req: any, res: Response) => {
         email: req.body.email || req.trabajador.email,
         direccion: req.body.direccion || req.trabajador.direccion,        
         cargo: req.body.cargo || req.trabajador.cargo,  
-        obra: req.body.obra || req.trabajador.obra, 
+        //obra: req.body.obra || req.trabajador.obra, 
         activo: req.body.obra || req.trabajador.obra        
     }
 
@@ -117,7 +117,7 @@ trabajadorRoutes.post('/update', (req: any, res: Response) => {
                     email: trabajadorDB.email,
                     direccion: trabajadorDB.direccion,                   
                     cargo: trabajadorDB.cargo,
-                    obra:  trabajadorDB.obra,
+                    //obra:  trabajadorDB.obra,
                     activo: trabajadorDB.activo
         });
 
