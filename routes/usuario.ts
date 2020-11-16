@@ -177,6 +177,7 @@ userRoutes.post('/create', ( req: Request, res: Response ) =>{
 userRoutes.post('/update', (req: any, res: Response) => {
     //userRoutes.post('/update', verificaToken,  (req: any, res: Response) => {
     const user = {
+        _id: req.body._id || req.usuario._id,
         documento: req.body.documento || req.usuario.documento,
         nombre: req.body.nombre || req.usuario.nombre,
         apellido: req.body.apellido || req.usuario.apellido,
@@ -187,35 +188,35 @@ userRoutes.post('/update', (req: any, res: Response) => {
         password: req.body.password || req.usuario.password,
         activo: true
     }
-    let email = req.body.email;
-    Usuario.findOne({email}, (err,userDB) => {
+    let id = req.body._id 
+    Usuario.findById({id}, (err,userDB) => {
         if(err)
             throw err;
 
         if(!userDB){
             return res.json({
                 ok: false,
-                mensaje: `No existe usuario con email ${email}`
+                mensaje: `No existe usuario con _id ${id}`
             });
         }
 
         if(!userDB.activo) {
             return res.json({
                 ok: false,
-                mensaje: `El usuario con email ${email} no esta activo`
+                mensaje: `El usuario con _id ${id} no esta activo`
             });
         }      
     });
 
     // Se entrega la información para actualizar 
-    Usuario.findByIdAndUpdate( req.body._id, user, { new: true }, ( err, userDB) => {
+    Usuario.findByIdAndUpdate( id, user, { new: true }, ( err, userDB) => {
         
         if( err ) throw err;
 
         if( !userDB  ) {
             return res.json({
                 ok: false,
-                mensaje: `No existe un usuario con documento ${user.documento}`
+                mensaje: `No existe un usuario con _id ${id}`
             });
         }
 
@@ -233,7 +234,7 @@ userRoutes.post('/update', (req: any, res: Response) => {
 
         res.json({
             ok: true,
-            mensaje: `Se ha actualizado el usuario con documento ${user.documento}`,
+            mensaje: `Se ha actualizado el usuario con _id ${id}`,
             token: tokenUser
         });
 
@@ -249,6 +250,7 @@ userRoutes.post('/delete', (req: any, res: Response) => {
     //userRoutes.post('/delete', verificaToken,  (req: any, res: Response) => {
 
     const user = {  
+        _id: req.body._id || req.usuario._id,
         documento: req.body.documento || req.usuario.documento,
         nombre: req.body.nombre || req.usuario.nombre,
         apellido: req.body.apellido || req.usuario.apellido,
@@ -260,28 +262,28 @@ userRoutes.post('/delete', (req: any, res: Response) => {
         activo: false 
     }
 
-    let email = req.body.email;
-    Usuario.findOne({email}, (err,userDB) => {
+    let id = req.body._id;
+    Usuario.findOne({id}, (err,userDB) => {
         if(err)
             throw err;
 
         if(!userDB){
             return res.json({
                 ok: false,
-                mensaje: `No existe usuario con email ${email}`
+                mensaje: `No existe usuario con _id ${id}`
             });
         }
 
         if(!userDB.activo) {
             return res.json({
                 ok: false,
-                mensaje: `El usuario con email ${email} no esta activo`
+                mensaje: `El usuario con _id ${id} no esta activo`
             });
         }      
     });
 
     // Se entrega la información para actualizar el campo activo a false
-    Usuario.findByIdAndUpdate( req.body._id, user, { new: true }, ( err, userDB) => {
+    Usuario.findByIdAndUpdate( id, user, { new: true }, ( err, userDB) => {
         
         if( err ) throw err;
 
