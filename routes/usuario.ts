@@ -188,35 +188,34 @@ userRoutes.post('/update', (req: any, res: Response) => {
         password: req.body.password || req.usuario.password,
         activo: true
     }
-    let id = req.body._id 
-    Usuario.findById({id}, (err,userDB) => {
+    Usuario.findById({_id : req.body._id}, (err,userDB) => {
         if(err)
             throw err;
 
         if(!userDB){
             return res.json({
                 ok: false,
-                mensaje: `No existe usuario con _id ${id}`
+                mensaje: `No existe usuario con documento ${req.body.documento}`
             });
         }
 
         if(!userDB.activo) {
             return res.json({
                 ok: false,
-                mensaje: `El usuario con _id ${id} no esta activo`
+                mensaje: `El usuario con documento ${req.body.documento} no esta activo`
             });
         }      
     });
 
     // Se entrega la información para actualizar 
-    Usuario.findByIdAndUpdate( id, user, { new: true }, ( err, userDB) => {
+    Usuario.findByIdAndUpdate( req.body._id, user, { new: true }, ( err, userDB) => {
         
         if( err ) throw err;
 
         if( !userDB  ) {
             return res.json({
                 ok: false,
-                mensaje: `No existe un usuario con _id ${id}`
+                mensaje: `No existe un usuario con documento ${req.body.documento}`
             });
         }
 
@@ -234,7 +233,7 @@ userRoutes.post('/update', (req: any, res: Response) => {
 
         res.json({
             ok: true,
-            mensaje: `Se ha actualizado el usuario con _id ${id}`,
+            mensaje: `Se ha actualizado el usuario con documento ${req.body.documento}`,
             token: tokenUser
         });
 
@@ -262,28 +261,28 @@ userRoutes.post('/delete', (req: any, res: Response) => {
         activo: false 
     }
 
-    let id = req.body._id;
-    Usuario.findOne({id}, (err,userDB) => {
+    //let id = req.body._id;
+    Usuario.findById({_id : req.body._id}, (err,userDB) => {
         if(err)
             throw err;
 
         if(!userDB){
             return res.json({
                 ok: false,
-                mensaje: `No existe usuario con _id ${id}`
+                mensaje: `No existe usuario con documento ${req.body.documento}`
             });
         }
 
         if(!userDB.activo) {
             return res.json({
                 ok: false,
-                mensaje: `El usuario con _id ${id} no esta activo`
+                mensaje: `El usuario con documento ${req.body.documento} no esta activo`
             });
         }      
     });
 
     // Se entrega la información para actualizar el campo activo a false
-    Usuario.findByIdAndUpdate( id, user, { new: true }, ( err, userDB) => {
+    Usuario.findByIdAndUpdate( req.body._id, user, { new: true }, ( err, userDB) => {
         
         if( err ) throw err;
 
