@@ -187,7 +187,7 @@ userRoutes.post('/update', (req: any, res: Response) => {
             });
         };
 
-        if(!userDB.activo){
+        if(!req.body.activo && !userDB.activo){
             return res.json({
                 ok: false,
                 mensaje: `El usuario con _id ${req.body._id} no está activo`
