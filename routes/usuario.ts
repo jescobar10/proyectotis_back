@@ -153,7 +153,6 @@ userRoutes.post('/login', (req: Request, res: Response) => {
                 email: userDB.email,
                 rol: userDB.rol,                   
                 password: userDB.password                  
-
             });
 
             res.json ({
@@ -174,130 +173,125 @@ userRoutes.post('/login', (req: Request, res: Response) => {
 
 //Actualizar Usuario
 userRoutes.post('/update', (req: any, res: Response) => {
-    //userRoutes.post('/update', verificaToken,  (req: any, res: Response) => {
-    const user = {
-        _id: req.body._id || req.usuario._id,
-        documento: req.body.documento || req.usuario.documento,
-        nombre: req.body.nombre || req.usuario.nombre,
-        apellido: req.body.apellido || req.usuario.apellido,
-        genero: req.body.genero || req.usuario.genero,
-        telefono: req.body.telefono || req.usuario.telefono,
-        //email: req.body.email || req.usuario.email,
-        rol: req.body.rol || req.usuario.rol,      
-        password: req.body.password || req.usuario.password,
-        activo: true
-    }
-    Usuario.findById({_id : req.body._id}, (err,userDB) => {
+    //Buscamos que exista el usuario
+    Usuario.findById({_id:req.body._id}, (err,userDB) => {
+        // Si no se puede procesar el query se arroja un error
         if(err)
             throw err;
 
+        // Si el usuario no existe en la BD no se procede con la petición
         if(!userDB){
             return res.json({
                 ok: false,
-                mensaje: `No existe usuario con documento ${req.body.documento}`
+                mensaje: `No existe el usuario con _id ${req.body._id}`
+            });
+        };
+
+        if(!userDB.activo){
+            return res.json({
+                ok: false,
+                mensaje: `El usuario con _id ${req.body._id} no está activo`
             });
         }
 
-        if(!userDB.activo) {
-            return res.json({
-                ok: false,
-                mensaje: `El usuario con documento ${req.body.documento} no esta activo`
-            });
-        }      
-    });
+        const user = {
+            _id: req.body._id || userDB._id,
+            documento: req.body.documento || userDB.documento,
+            nombre: req.body.nombre || userDB.nombre,
+            apellido: req.body.apellido || userDB.apellido,
+            genero: req.body.genero || userDB.genero,
+            telefono: req.body.telefono || userDB.telefono,
+            //email: req.body.email || userDB.email,
+            rol: req.body.rol || userDB.rol,      
+            password: req.body.password || userDB.password,
+            activo: req.body.activo || userDB.activo
+        }
 
-    // Se entrega la información para actualizar 
-    Usuario.findByIdAndUpdate( req.body._id, user, { new: true }, ( err, userDB) => {
+        console.log(user);
         
-        if( err ) throw err;
+        Usuario.updateOne( {_id:req.body._id}, user, { new: true }, ( err, userUpdated) => {
+        
+            if( err ) throw err;
 
-        if( !userDB  ) {
-            return res.json({
-                ok: false,
-                mensaje: `No existe un usuario con documento ${req.body.documento}`
+            const tokenUser = Token.getJwtToken({
+                        _id: userUpdated._id,
+                        documento: userUpdated.documento,
+                        nombre: userUpdated.nombre,
+                        apellido: userUpdated.apellido,
+                        genero: userUpdated.genero,
+                        telefono: userUpdated.telefono,
+                        email: userUpdated.email,
+                        rol: userUpdated.rol,                   
+                        password: userUpdated.password    
             });
-        }
-
-        const tokenUser = Token.getJwtToken({
-                    _id: userDB._id,
-                    documento: userDB.documento,
-                    nombre: userDB.nombre,
-                    apellido: userDB.apellido,
-                    genero: userDB.genero,
-                    telefono: userDB.telefono,
-                    email: userDB.email,
-                    rol: userDB.rol,                   
-                    password: userDB.password    
+    
+            res.json({
+                ok: true,
+                mensaje: `Se ha actualizado el usuario con documento ${user.documento}`,
+                token: tokenUser
+            });
+    
         });
-
-        res.json({
-            ok: true,
-            mensaje: `Se ha actualizado el usuario con documento ${req.body.documento}`,
-            token: tokenUser
-        });
-
     });
-
-   
 });
 
 
 // Eliminar Usuario
 // En este caso no se eleiminara el registro si no que se pondra en un estado de inactivo
-userRoutes.post('/delete', (req: any, res: Response) => {
-    //userRoutes.post('/delete', verificaToken,  (req: any, res: Response) => {
+// userRoutes.post('/delete', (req: any, res: Response) => {
+//     //userRoutes.post('/delete', verificaToken,  (req: any, res: Response) => {
 
-    const user = {  
-        _id: req.body._id || req.usuario._id,
-        documento: req.body.documento || req.usuario.documento,
-        nombre: req.body.nombre || req.usuario.nombre,
-        apellido: req.body.apellido || req.usuario.apellido,
-        genero: req.body.genero || req.usuario.genero,
-        telefono: req.body.telefono || req.usuario.telefono,
-        //email: req.body.email || req.usuario.email,
-        rol: req.body.rol || req.usuario.rol,      
-        password: req.body.password || req.usuario.password,             
-        activo: false 
-    }
+//     const user = {  
+//         _id: req.body._id || req.usuario._id,
+//         documento: req.body.documento || req.usuario.documento,
+//         nombre: req.body.nombre || req.usuario.nombre,
+//         apellido: req.body.apellido || req.usuario.apellido,
+//         genero: req.body.genero || req.usuario.genero,
+//         telefono: req.body.telefono || req.usuario.telefono,
+//         //email: req.body.email || req.usuario.email,
+//         rol: req.body.rol || req.usuario.rol,      
+//         password: req.body.password || req.usuario.password,             
+//         activo: false 
+//     }
 
-    //let id = req.body._id;
-    Usuario.findById({_id : req.body._id}, (err,userDB) => {
-        if(err)
-            throw err;
+//     //let id = req.body._id;
+//     Usuario.findById({_id : req.body._id}, (err,userDB) => {
+//         if(err)
+//             throw err;
 
-        if(!userDB){
-            return res.json({
-                ok: false,
-                mensaje: `No existe usuario con documento ${req.body.documento}`
-            });
-        }
+//         if(!userDB){
+//             return res.json({
+//                 ok: false,
+//                 mensaje: `No existe usuario con documento ${req.body.documento}`
+//             });
+//         }
 
-        if(!userDB.activo) {
-            return res.json({
-                ok: false,
-                mensaje: `El usuario con documento ${req.body.documento} no esta activo`
-            });
-        }      
-    });
+//         if(!userDB.activo) {
+//             return res.json({
+//                 ok: false,
+//                 mensaje: `El usuario con documento ${req.body.documento} no esta activo`
+//             });
+//         }      
+//     });
 
-    // Se entrega la información para actualizar el campo activo a false
-    Usuario.findByIdAndUpdate( req.body._id, user, { new: true }, ( err, userDB) => {
+//     // Se entrega la información para actualizar el campo activo a false
+//     Usuario.findByIdAndUpdate( req.body._id, user, { new: true }, ( err, userDB) => {
         
-        if( err ) throw err;
+//         if( err ) throw err;
 
-        if( !userDB  ) {
-            return res.json({
-                ok: false,
-                mensaje: `No existe un usuario con documento ${user.documento} y nombre ${user.nombre}`
-            });
-        }      
+//         if( !userDB  ) {
+//             return res.json({
+//                 ok: false,
+//                 mensaje: `No existe un usuario con documento ${user.documento} y nombre ${user.nombre}`
+//             });
+//         }      
 
-        res.json({
-            ok: true,
-            mensaje: `Se ha inactivado el usuario con documento ${user.documento} y nombre ${user.nombre}`
-        });
-    });   
-});
+//         res.json({
+//             ok: true,
+//             mensaje: `Se ha inactivado el usuario con documento ${user.documento} y nombre ${user.nombre}`
+//         });
+//     });   
+// });
 
 //Se exporta 
 export default userRoutes;
