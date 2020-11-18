@@ -39,7 +39,7 @@ proveedorRoutes.get('/:id', (req: Request, res: Response) => {
         if(!proveedorDB){
             return res.json({
                 ok: false,
-                mensaje: `No existe usuario con identificacion ${id}`
+                mensaje: `No existe proveedor con identificacion ${id}`
             });
         }
 
@@ -58,13 +58,13 @@ proveedorRoutes.get('/:id', (req: Request, res: Response) => {
 
             res.json ({
               ok: true,
-              usuario: proveedor
+              proveedor
             });
 
         }else {
             return res.json({
                 ok: false,
-                mensaje: `El usuario con identificacion ${id} no esta activo`
+                mensaje: `El proveedor con identificacion ${id} no esta activo`
             });
         }      
     });

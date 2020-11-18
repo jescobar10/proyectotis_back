@@ -187,7 +187,7 @@ userRoutes.post('/update', (req: any, res: Response) => {
             });
         };
 
-        if(!req.body.activo && !userDB.activo){
+        if(((!req.body.activo) || req.body.activo == 'false') && !userDB.activo){
             return res.json({
                 ok: false,
                 mensaje: `El usuario con _id ${req.body._id} no está activo`
@@ -201,7 +201,7 @@ userRoutes.post('/update', (req: any, res: Response) => {
             apellido: req.body.apellido || userDB.apellido,
             genero: req.body.genero || userDB.genero,
             telefono: req.body.telefono || userDB.telefono,
-            //email: req.body.email || userDB.email,
+            email: req.body.email || userDB.email,
             rol: req.body.rol || userDB.rol,      
             password: req.body.password || userDB.password,
             activo: req.body.activo || userDB.activo
@@ -214,15 +214,15 @@ userRoutes.post('/update', (req: any, res: Response) => {
             if( err ) throw err;
 
             const tokenUser = Token.getJwtToken({
-                        _id: userUpdated._id,
-                        documento: userUpdated.documento,
-                        nombre: userUpdated.nombre,
-                        apellido: userUpdated.apellido,
-                        genero: userUpdated.genero,
-                        telefono: userUpdated.telefono,
-                        email: userUpdated.email,
-                        rol: userUpdated.rol,                   
-                        password: userUpdated.password    
+                        _id: user._id,
+                        documento: user.documento,
+                        nombre: user.nombre,
+                        apellido: user.apellido,
+                        genero: user.genero,
+                        telefono: user.telefono,
+                        email: user.email,
+                        rol: user.rol,                   
+                        password: user.password    
             });
     
             res.json({
