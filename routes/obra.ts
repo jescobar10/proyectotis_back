@@ -74,14 +74,36 @@ obraRoutes.post('/create', ( req: Request, res: Response ) =>{
 obraRoutes.post('/update', (req: any, res: Response) => {
     //userRoutes.post('/update', verificaToken,  (req: any, res: Response) => {
 
+    //Buscamos que exista la obra
+    Obra.findById({_id:req.body._id}, (err,obraDB) => {
+        // Si no se puede procesar el query se arroja un error
+        if(err)
+            throw err;
+
+        // Si la Obra no existe en la BD no se procede con la petición
+        if(!obraDB){
+            return res.json({
+                ok: false,
+                mensaje: `No existe la obra con _id ${req.body._id}`
+            });
+        };
+
+        if(!req.body.activo && !obraDB.activo){
+            return res.json({
+                ok: false,
+                mensaje: `La obra con _id ${req.body._id} no está activa`
+            });
+        }
+
+
     const obra = {
-        identObra: req.body.identObra || req.obra.identObra,
-        nombreObra: req.body.nombreObra || req.obra.nombreObra,
-        descripcion: req.body.descripcion || req.obra.descripcion,
-        fechaInicio: req.body.fechaInicio || req.obra.fechaInicio,
-        fechaFin: req.body.fechaFin || req.obra.fechaFin,
-        regPlano: req.body.regPlano || req.obra.regPlano,          
-        activo: req.body.obra || req.trabajador.obra        
+        identObra: req.body.identObra || obraDB.identObra,
+        nombreObra: req.body.nombreObra || obraDB.nombreObra,
+        descripcion: req.body.descripcion || obraDB.descripcion,
+        fechaInicio: req.body.fechaInicio || obraDB.fechaInicio,
+        fechaFin: req.body.fechaFin || obraDB.fechaFin,
+        regPlano: req.body.regPlano || obraDB.regPlano,          
+        activo: req.body.activo || obraDB.activo       
     }
 
     // Se entrega la información para actualizar 
@@ -111,6 +133,8 @@ obraRoutes.post('/update', (req: any, res: Response) => {
             ok: true,
             token: tokenUser
         });
+
+    });  
 
     });   
 });

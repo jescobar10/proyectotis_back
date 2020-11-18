@@ -72,38 +72,58 @@ obraRoutes.post('/create', (req, res) => {
 //Actualizar Obra
 obraRoutes.post('/update', (req, res) => {
     //userRoutes.post('/update', verificaToken,  (req: any, res: Response) => {
-    const obra = {
-        identObra: req.body.identObra || req.obra.identObra,
-        nombreObra: req.body.nombreObra || req.obra.nombreObra,
-        descripcion: req.body.descripcion || req.obra.descripcion,
-        fechaInicio: req.body.fechaInicio || req.obra.fechaInicio,
-        fechaFin: req.body.fechaFin || req.obra.fechaFin,
-        regPlano: req.body.regPlano || req.obra.regPlano,
-        activo: req.body.obra || req.trabajador.obra
-    };
-    // Se entrega la información para actualizar 
-    obra_model_1.Obra.findByIdAndUpdate(req.obra._id, obra, { new: true }, (err, obraDB) => {
+    //Buscamos que exista la obra
+    obra_model_1.Obra.findById({ _id: req.body._id }, (err, obraDB) => {
+        // Si no se puede procesar el query se arroja un error
         if (err)
             throw err;
+        // Si la Obra no existe en la BD no se procede con la petición
         if (!obraDB) {
             return res.json({
                 ok: false,
-                mensaje: 'No existe una obra con ese ID'
+                mensaje: `No existe el obra con _id ${req.body._id}`
             });
         }
-        const tokenUser = token_1.default.getJwtToken({
-            _id: obraDB._id,
-            identObra: obraDB.identObra,
-            nombreObra: obraDB.nombreObra,
-            descripcion: obraDB.descripcion,
-            fechaInicio: obraDB.fechaInicio,
-            fechaFin: obraDB.fechaFin,
-            regPlano: obraDB.regPlano,
-            activo: obraDB.activo
-        });
-        res.json({
-            ok: true,
-            token: tokenUser
+        ;
+        if (!req.body.activo && !obraDB.activo) {
+            return res.json({
+                ok: false,
+                mensaje: `La obra con _id ${req.body._id} no está activa`
+            });
+        }
+        const obra = {
+            identObra: req.body.identObra || obraDB.identObra,
+            nombreObra: req.body.nombreObra || obraDB.nombreObra,
+            descripcion: req.body.descripcion || obraDB.descripcion,
+            fechaInicio: req.body.fechaInicio || obraDB.fechaInicio,
+            fechaFin: req.body.fechaFin || obraDB.fechaFin,
+            regPlano: req.body.regPlano || obraDB.regPlano,
+            activo: req.body.activo || obraDB.activo
+        };
+        // Se entrega la información para actualizar 
+        obra_model_1.Obra.findByIdAndUpdate(req.obra._id, obra, { new: true }, (err, obraDB) => {
+            if (err)
+                throw err;
+            if (!obraDB) {
+                return res.json({
+                    ok: false,
+                    mensaje: 'No existe una obra con ese ID'
+                });
+            }
+            const tokenUser = token_1.default.getJwtToken({
+                _id: obraDB._id,
+                identObra: obraDB.identObra,
+                nombreObra: obraDB.nombreObra,
+                descripcion: obraDB.descripcion,
+                fechaInicio: obraDB.fechaInicio,
+                fechaFin: obraDB.fechaFin,
+                regPlano: obraDB.regPlano,
+                activo: obraDB.activo
+            });
+            res.json({
+                ok: true,
+                token: tokenUser
+            });
         });
     });
 });
