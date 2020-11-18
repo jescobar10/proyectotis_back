@@ -162,15 +162,16 @@ trabajadorRoutes.post('/update', (req: any, res: Response) => {
             if( err ) throw err;
 
             const tokenTrabajador = Token.getJwtToken({
-                        _id: trabajadorUpdated._id,
-                        documento: trabajadorUpdated.documento,
-                        nombre: trabajadorUpdated.nombre,
-                        apellido: trabajadorUpdated.apellido,
-                        genero: trabajadorUpdated.genero,
-                        telefono: trabajadorUpdated.telefono,
-                        email: trabajadorUpdated.email,
-                        rol: trabajadorUpdated.rol,                   
-                        password: trabajadorUpdated.password    
+                        _id:trabajador._id,
+                        documento:trabajador.documento,
+                        nombre:trabajador.nombre,
+                        apellido:trabajador.apellido,
+                        genero:trabajador.genero,
+                        telefono:trabajador.telefono,
+                        email:trabajador.email,
+                        direccion:trabajador.direccion,
+                        cargo:trabajador.cargo,
+                        activo:trabajador.activo  
             });
     
             res.json({
