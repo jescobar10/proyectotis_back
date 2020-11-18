@@ -128,9 +128,7 @@ proveedorRoutes.post('/update', (req: any, res: Response) => {
                 mensaje: `No existe el proveedor con _id ${req.body._id}`
             });
         };
-        console.log(req.body.activo);
-        console.log(proveedorDB);
-        if(!req.body.activo && !proveedorDB.activo){
+        if(((!req.body.activo) || req.body.activo == 'false') && (!proveedorDB.activo)){
             return res.json({
                 ok: false,
                 mensaje: `El proveedor con _id ${req.body._id} no está activo`
