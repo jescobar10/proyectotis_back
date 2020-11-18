@@ -20,7 +20,8 @@ const trabajadorSchema = new mongoose_1.Schema({
         required: [true, 'El genero es necesario ']
     },
     telefono: {
-        type: Number
+        type: Number,
+        required: [true, 'El telefono es necesario para contactar al trabajador']
     },
     email: {
         type: String,

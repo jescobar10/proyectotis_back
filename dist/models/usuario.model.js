@@ -24,7 +24,7 @@ const usuarioSchema = new mongoose_1.Schema({
         required: [true, 'El genero es necesario ']
     },
     telefono: {
-        type: Number
+        type: String
     },
     email: {
         type: String,

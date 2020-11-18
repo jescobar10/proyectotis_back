@@ -37,6 +37,8 @@ materialRoutes.post('/create', ( req: Request, res: Response ) =>{
         referencia     : req.body.referencia,
         unidadMedida   : req.body.unidadMedida,
         precio         : req.body.precio,
+        cantidad       : req.body.cantidad,
+        proveedor      : req.body.proveedor,
         activo         : req.body.activo
     };
 
@@ -48,7 +50,9 @@ materialRoutes.post('/create', ( req: Request, res: Response ) =>{
                     codigo: materialDB.codigo,
                     referencia: materialDB.referencia,
                     unidadMedida: materialDB.unidadMedida,
-                    precio: materialDB.precio,                    
+                    precio: materialDB.precio,  
+                    cantidad: materialDB.cantidad,   
+                    proveedor: materialDB.proveedor,               
                     activo: materialDB.activo                       
         });
 
@@ -70,12 +74,35 @@ materialRoutes.post('/create', ( req: Request, res: Response ) =>{
 materialRoutes.post('/update', (req: any, res: Response) => {
     //userRoutes.post('/update', verificaToken,  (req: any, res: Response) => {
 
+    //Buscamos que exista el Material
+    Material.findById({_id:req.body._id}, (err,materialDB) => {
+        // Si no se puede procesar el query se arroja un error
+        if(err)
+            throw err;
+
+        // Si el Material no existe en la BD no se procede con la petición
+        if(!materialDB){
+            return res.json({
+                ok: false,
+                mensaje: `No existe el material con _id ${req.body._id}`
+            });
+        };
+
+        if(!req.body.activo && !materialDB.activo){
+            return res.json({
+                ok: false,
+                mensaje: `El material con _id ${req.body._id} no está activo`
+            });
+        }
+
     const material = {
-        codigo: req.body.codigo || req.material.codigo,
-        referencia: req.body.referencia || req.material.referencia,
-        unidadMedida: req.body.unidadMedida || req.material.unidadMedida,
-        precio: req.body.precio || req.obra.precio,
-        activo: req.body.activo || req.trabajador.activo        
+        codigo: req.body.codigo || materialDB.codigo,
+        referencia: req.body.referencia || materialDB.referencia,
+        unidadMedida: req.body.unidadMedida || materialDB.unidadMedida,
+        precio: req.body.precio || materialDB.precio,
+        cantidad: req.body.cantidad || materialDB.cantidad,
+        proveedor: req.body.proveedor || materialDB.proveedor,
+        activo: req.body.activo || materialDB.activo        
     }
 
     // Se entrega la información para actualizar 
@@ -95,6 +122,8 @@ materialRoutes.post('/update', (req: any, res: Response) => {
             codigo: materialDB.codigo,
             referencia: materialDB.referencia,
             unidadMedida: materialDB.unidadMedida,
+            cantidad: materialDB.cantidad,
+            proveedor: materialDB.proveedor,
             precio: materialDB.precio,                    
             activo: materialDB.activo                       
         });
@@ -104,43 +133,45 @@ materialRoutes.post('/update', (req: any, res: Response) => {
             token: tokenUser
         });
 
+    });
+
     });   
 });
 
 //Eliminar materiales
 //En este caso no se eliminara el registro si no que se pondra en un estado de inactivo
-materialRoutes.post('/delete', (req: any, res: Response) => {
-    //userRoutes.post('/delete', verificaToken,  (req: any, res: Response) => {
+// materialRoutes.post('/delete', (req: any, res: Response) => {
+//     //userRoutes.post('/delete', verificaToken,  (req: any, res: Response) => {
 
-    const obra = {
-        _id: req.body._id || req.material._id,        
-        activo: req.body.activo || req.material.activo
-    }
+//     const obra = {
+//         _id: req.body._id || req.material._id,        
+//         activo: req.body.activo || req.material.activo
+//     }
 
-    // Se entrega la información para actualizar el campo activo a false
-    Material.findByIdAndUpdate( req.material._id, obra, { new: true }, ( err, materialDB) => {
+//     // Se entrega la información para actualizar el campo activo a false
+//     Material.findByIdAndUpdate( req.material._id, obra, { new: true }, ( err, materialDB) => {
         
-        if( err ) throw err;
+//         if( err ) throw err;
 
-        if( !materialDB  ) {
-            return res.json({
-                ok: false,
-                mensaje: 'No existe un material con ese ID'
-            });
-        }
+//         if( !materialDB  ) {
+//             return res.json({
+//                 ok: false,
+//                 mensaje: 'No existe un material con ese ID'
+//             });
+//         }
 
-        const tokenUser = Token.getJwtToken({
-            _id: materialDB._id,
-                    documento: materialDB.codigo,
-                    activo: false  
-        });
+//         const tokenUser = Token.getJwtToken({
+//             _id: materialDB._id,
+//                     documento: materialDB.codigo,
+//                     activo: false  
+//         });
 
-        res.json({
-            ok: true,
-            token: tokenUser
-        });
-    });   
-});
+//         res.json({
+//             ok: true,
+//             token: tokenUser
+//         });
+//     });   
+// });
 
 //Se exporta la ruta de los materiales
 export default materialRoutes;

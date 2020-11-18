@@ -1,4 +1,5 @@
 import {  Schema, model, Document }  from 'mongoose';
+import { Proveedor } from './proveedor.model';
 
 const materialSchema = new Schema( {
     
@@ -22,6 +23,17 @@ const materialSchema = new Schema( {
        required: [ true, 'El precio o valor del material es necesario.']
    },
 
+   cantidad: {
+        type: Number,
+        required: [ true, 'La cantidad es necesaria.']
+   },
+
+   proveedor: {
+        type: Schema.Types.ObjectId,
+        ref: "Proveedor",
+        required: [ true, 'Debe de existir una referencia a un proveedor']
+   },
+
    activo: {
        type: Boolean
    }
@@ -35,6 +47,8 @@ interface Imateriales extends Document {
     referencia: String;
     unidadMedida: String;
     precio: Number;
+    cantidad: Number;
+    proveedor: string;
     activo: Boolean;      
 }
 

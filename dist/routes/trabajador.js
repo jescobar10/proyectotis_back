@@ -22,7 +22,7 @@ trabajadorRoutes.get('/', (req, res) => __awaiter(this, void 0, void 0, function
     let skip = pagina - 1;
     skip = skip * 10;
     const body = req.body;
-    const trabajadores = yield trabajador_model_1.Trabajador.find({ activo: body.activo })
+    const trabajadores = yield trabajador_model_1.Trabajador.find()
         //Muestra ordenado por nombre
         .sort({ nombre: 1 })
         .skip(skip)
@@ -46,12 +46,12 @@ trabajadorRoutes.post('/create', (req, res) => {
         email: req.body.email,
         direccion: req.body.direccion,
         cargo: req.body.cargo,
-        obra: req.body.obra,
+        //obra              : req.body.obra,
         activo: req.body.activo
     };
     //Se crea el trabajador en Base de datos
     trabajador_model_1.Trabajador.create(trabajador).then(trabajadorDB => {
-        const tokenUser = token_1.default.getJwtToken({
+        const tokenTrabajador = token_1.default.getJwtToken({
             _id: trabajadorDB._id,
             documento: trabajadorDB.documento,
             nombre: trabajadorDB.nombre,
@@ -61,12 +61,12 @@ trabajadorRoutes.post('/create', (req, res) => {
             email: trabajadorDB.email,
             direccion: trabajadorDB.direccion,
             cargo: trabajadorDB.cargo,
-            obra: trabajadorDB.obra,
+            //obra: trabajadorDB.obra,
             activo: trabajadorDB.activo
         });
         res.json({
             ok: true,
-            token: tokenUser
+            token: tokenTrabajador
         });
     }).catch(err => {
         res.json({
@@ -75,76 +75,97 @@ trabajadorRoutes.post('/create', (req, res) => {
         });
     });
 });
-//Actualizar Trabajador
-trabajadorRoutes.post('/update', (req, res) => {
-    //userRoutes.post('/update', verificaToken,  (req: any, res: Response) => {
-    const trabajador = {
-        documento: req.body.documento || req.trabajador.documento,
-        nombre: req.body.nombre || req.trabajador.nombre,
-        apellido: req.body.apellido || req.trabajador.apellido,
-        genero: req.body.genero || req.trabajador.genero,
-        telefono: req.body.telefono || req.trabajador.telefono,
-        email: req.body.email || req.trabajador.email,
-        direccion: req.body.direccion || req.trabajador.direccion,
-        cargo: req.body.cargo || req.trabajador.cargo,
-        obra: req.body.obra || req.trabajador.obra,
-        activo: req.body.obra || req.trabajador.obra
-    };
-    // Se entrega la información para actualizar 
-    trabajador_model_1.Trabajador.findByIdAndUpdate(req.trabajador._id, trabajador, { new: true }, (err, trabajadorDB) => {
+//Retornar trabajador por documento
+trabajadorRoutes.get('/:documento', (req, res) => {
+    let documento = req.params.documento;
+    trabajador_model_1.Trabajador.findOne({ documento }, (err, trabajadorDB) => {
         if (err)
             throw err;
         if (!trabajadorDB) {
             return res.json({
                 ok: false,
-                mensaje: 'Noexiste un usuario con ese ID'
+                mensaje: `No existe un trabajador con documento ${documento}`
             });
         }
-        const tokenUser = token_1.default.getJwtToken({
-            _id: trabajadorDB._id,
-            documento: trabajadorDB.documento,
-            nombre: trabajadorDB.nombre,
-            apellido: trabajadorDB.apellido,
-            genero: trabajadorDB.genero,
-            telefono: trabajadorDB.telefono,
-            email: trabajadorDB.email,
-            direccion: trabajadorDB.direccion,
-            cargo: trabajadorDB.cargo,
-            obra: trabajadorDB.obra,
-            activo: trabajadorDB.activo
-        });
-        res.json({
-            ok: true,
-            token: tokenUser
-        });
+        if (trabajadorDB.activo) {
+            let trabajador = {
+                _id: trabajadorDB._id,
+                documento: trabajadorDB.documento,
+                nombre: trabajadorDB.nombre,
+                apellido: trabajadorDB.apellido,
+                genero: trabajadorDB.genero,
+                telefono: trabajadorDB.telefono,
+                email: trabajadorDB.email,
+                direccion: trabajadorDB.direccion,
+                cargo: trabajadorDB.cargo,
+                activo: trabajadorDB.activo
+            };
+            res.json({
+                ok: true,
+                trabajador
+            });
+        }
+        else {
+            return res.json({
+                ok: false,
+                mensaje: `El trabajador con documento ${documento} no esta activo`
+            });
+        }
     });
 });
-//Eliminar Trabajador
-//En este caso no se eliminara el registro si no que se pondra en un estado de inactivo
-trabajadorRoutes.post('/delete', (req, res) => {
-    //userRoutes.post('/delete', verificaToken,  (req: any, res: Response) => {
-    const user = {
-        _id: req.body._id || req.trabajador._id,
-        activo: req.body.activo || req.trabajador.activo
-    };
-    // Se entrega la información para actualizar el campo activo a false
-    trabajador_model_1.Trabajador.findByIdAndUpdate(req.trabajador._id, user, { new: true }, (err, trabajadorDB) => {
+//Actualizar Trabajador
+trabajadorRoutes.post('/update', (req, res) => {
+    //Buscamos que exista el usuario
+    trabajador_model_1.Trabajador.findById({ _id: req.body._id }, (err, trabajadorDB) => {
+        // Si no se puede procesar el query se arroja un error
         if (err)
             throw err;
+        // Si el trabajador no existe en la BD no se procede con la petición
         if (!trabajadorDB) {
             return res.json({
                 ok: false,
-                mensaje: 'No existe un trabajador con ese ID'
+                mensaje: `No existe el trabajador con _id ${req.body._id}`
             });
         }
-        const tokenUser = token_1.default.getJwtToken({
-            _id: trabajadorDB._id,
-            documento: trabajadorDB.documento,
-            activo: false
-        });
-        res.json({
-            ok: true,
-            token: tokenUser
+        ;
+        if (!req.body.activo && !trabajadorDB.activo) {
+            return res.json({
+                ok: false,
+                mensaje: `El trabajador con _id ${req.body._id} no está activo`
+            });
+        }
+        const trabajador = {
+            _id: req.body._id || trabajadorDB._id,
+            documento: req.body.documento || trabajadorDB.documento,
+            nombre: req.body.nombre || trabajadorDB.nombre,
+            apellido: req.body.apellido || trabajadorDB.apellido,
+            genero: req.body.genero || trabajadorDB.genero,
+            telefono: req.body.telefono || trabajadorDB.telefono,
+            email: req.body.email || trabajadorDB.email,
+            direccion: req.body.direccion || trabajadorDB.direccion,
+            cargo: req.body.cargo || trabajadorDB.cargo,
+            activo: req.body.activo || trabajadorDB.activo
+        };
+        console.log(trabajador);
+        trabajador_model_1.Trabajador.updateOne({ _id: req.body._id }, trabajador, { new: true }, (err, trabajadorUpdated) => {
+            if (err)
+                throw err;
+            const tokenTrabajador = token_1.default.getJwtToken({
+                _id: trabajadorUpdated._id,
+                documento: trabajadorUpdated.documento,
+                nombre: trabajadorUpdated.nombre,
+                apellido: trabajadorUpdated.apellido,
+                genero: trabajadorUpdated.genero,
+                telefono: trabajadorUpdated.telefono,
+                email: trabajadorUpdated.email,
+                rol: trabajadorUpdated.rol,
+                password: trabajadorUpdated.password
+            });
+            res.json({
+                ok: true,
+                mensaje: `Se ha actualizado el usuario con documento ${trabajador.documento}`,
+                token: tokenTrabajador
+            });
         });
     });
 });

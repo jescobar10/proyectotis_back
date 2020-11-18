@@ -16,9 +16,6 @@ const clienteSchema = new mongoose_1.Schema({
         type: String,
         required: [true, 'El Nombre es necesario ']
     },
-    repreLegal: {
-        type: String
-    },
     telefono: {
         type: Number,
         required: [true, 'El Telefono es necesario ']

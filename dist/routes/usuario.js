@@ -45,7 +45,7 @@ userRoutes.get('/:email', (req, res) => {
         if (!userDB) {
             return res.json({
                 ok: false,
-                mensaje: `No existe usuario con documento ${email}`
+                mensaje: `No existe usuario con email ${email}`
             });
         }
         if (userDB.activo) {
@@ -69,7 +69,7 @@ userRoutes.get('/:email', (req, res) => {
         else {
             return res.json({
                 ok: false,
-                mensaje: `El usuario con documento ${email} no esta activo`
+                mensaje: `El usuario con email ${email} no esta activo`
             });
         }
     });
@@ -90,45 +90,6 @@ userRoutes.post('/create', (req, res) => {
         //fechaNacimiento,
         //avatar
     };
-    //Login 
-    userRoutes.post('/login', (req, res) => {
-        const body = req.body;
-        //Traemos el usuario por la llave en este caso email
-        usuario_model_1.Usuario.findOne({ email: body.email }, (err, userDB) => {
-            if (err)
-                throw err;
-            if (!userDB) {
-                return res.json({
-                    ok: false,
-                    mensaje: 'Usuario/Contraseña no son correctos'
-                });
-            }
-            //Se utiliza el metodo comparar password
-            if (userDB.compararPassword(body.password)) {
-                const tokenUser = token_1.default.getJwtToken({
-                    _id: userDB._id,
-                    documento: userDB.documento,
-                    nombre: userDB.nombre,
-                    apellido: userDB.apellido,
-                    genero: userDB.genero,
-                    telefono: userDB.telefono,
-                    email: userDB.email,
-                    rol: userDB.rol,
-                    password: userDB.password
-                });
-                res.json({
-                    ok: true,
-                    token: tokenUser
-                });
-            }
-            else {
-                return res.json({
-                    ok: false,
-                    mensaje: 'Usuario/Contraseña no son correctos ***'
-                });
-            }
-        });
-    });
     //Se crea el usuario en Base de datos
     usuario_model_1.Usuario.create(user).then(userDB => {
         const tokenUser = token_1.default.getJwtToken({
@@ -153,52 +114,107 @@ userRoutes.post('/create', (req, res) => {
         });
     });
 });
-//Actualizar Usuario
-userRoutes.post('/update', (req, res) => {
-    //userRoutes.post('/update', verificaToken,  (req: any, res: Response) => {
-    const user = {
-        documento: req.body.documento || req.usuario.documento,
-        nombre: req.body.nombre || req.usuario.nombre,
-        apellido: req.body.apellido || req.usuario.apellido,
-        genero: req.body.genero || req.usuario.genero,
-        telefono: req.body.telefono || req.usuario.telefono,
-        //email: req.body.email || req.usuario.email,
-        rol: req.body.rol || req.usuario.rol,
-        password: req.body.password || req.usuario.password,
-        activo: true
-    };
-    // Se entrega la información para actualizar 
-    usuario_model_1.Usuario.findByIdAndUpdate(req.usuario._id, user, { new: true }, (err, userDB) => {
+//Login 
+userRoutes.post('/login', (req, res) => {
+    const body = req.body;
+    //Traemos el usuario por la llave en este caso email
+    usuario_model_1.Usuario.findOne({ email: body.email }, (err, userDB) => {
         if (err)
             throw err;
         if (!userDB) {
             return res.json({
                 ok: false,
-                mensaje: 'No existe un usuario con ese ID'
+                mensaje: 'Usuario/Contraseña no son correctos'
             });
         }
-        const tokenUser = token_1.default.getJwtToken({
-            _id: userDB._id,
-            documento: userDB.documento,
-            nombre: userDB.nombre,
-            apellido: userDB.apellido,
-            genero: userDB.genero,
-            telefono: userDB.telefono,
-            email: userDB.email,
-            rol: userDB.rol,
-            password: userDB.password
-        });
-        res.json({
-            ok: true,
-            token: tokenUser
+        //Se utiliza el metodo comparar password
+        if (userDB.compararPassword(body.password)) {
+            const tokenUser = token_1.default.getJwtToken({
+                _id: userDB._id,
+                documento: userDB.documento,
+                nombre: userDB.nombre,
+                apellido: userDB.apellido,
+                genero: userDB.genero,
+                telefono: userDB.telefono,
+                email: userDB.email,
+                rol: userDB.rol,
+                password: userDB.password
+            });
+            res.json({
+                ok: true,
+                token: tokenUser
+            });
+        }
+        else {
+            return res.json({
+                ok: false,
+                mensaje: 'Usuario/Contraseña no son correctos ***'
+            });
+        }
+    });
+});
+//Actualizar Usuario
+userRoutes.post('/update', (req, res) => {
+    //Buscamos que exista el usuario
+    usuario_model_1.Usuario.findById({ _id: req.body._id }, (err, userDB) => {
+        // Si no se puede procesar el query se arroja un error
+        if (err)
+            throw err;
+        // Si el usuario no existe en la BD no se procede con la petición
+        if (!userDB) {
+            return res.json({
+                ok: false,
+                mensaje: `No existe el usuario con _id ${req.body._id}`
+            });
+        }
+        ;
+        if (!req.body.activo && !userDB.activo) {
+            return res.json({
+                ok: false,
+                mensaje: `El usuario con _id ${req.body._id} no está activo`
+            });
+        }
+        const user = {
+            _id: req.body._id || userDB._id,
+            documento: req.body.documento || userDB.documento,
+            nombre: req.body.nombre || userDB.nombre,
+            apellido: req.body.apellido || userDB.apellido,
+            genero: req.body.genero || userDB.genero,
+            telefono: req.body.telefono || userDB.telefono,
+            //email: req.body.email || userDB.email,
+            rol: req.body.rol || userDB.rol,
+            password: req.body.password || userDB.password,
+            activo: req.body.activo || userDB.activo
+        };
+        console.log(user);
+        usuario_model_1.Usuario.updateOne({ _id: req.body._id }, user, { new: true }, (err, userUpdated) => {
+            if (err)
+                throw err;
+            const tokenUser = token_1.default.getJwtToken({
+                _id: userUpdated._id,
+                documento: userUpdated.documento,
+                nombre: userUpdated.nombre,
+                apellido: userUpdated.apellido,
+                genero: userUpdated.genero,
+                telefono: userUpdated.telefono,
+                email: userUpdated.email,
+                rol: userUpdated.rol,
+                password: userUpdated.password
+            });
+            res.json({
+                ok: true,
+                mensaje: `Se ha actualizado el usuario con documento ${user.documento}`,
+                token: tokenUser
+            });
         });
     });
 });
-//Eliminar Usuario
-//En este caso no se eleiminara el registro si no que se pondra en un estado de inactivo
+// Eliminar Usuario
+// En este caso no se eleiminara el registro si no que se pondra en un estado de inactivo
 // userRoutes.post('/delete', (req: any, res: Response) => {
 //     //userRoutes.post('/delete', verificaToken,  (req: any, res: Response) => {
 //     const user = {  
+//         _id: req.body._id || req.usuario._id,
 //         documento: req.body.documento || req.usuario.documento,
 //         nombre: req.body.nombre || req.usuario.nombre,
 //         apellido: req.body.apellido || req.usuario.apellido,
@@ -209,18 +225,35 @@ userRoutes.post('/update', (req, res) => {
 //         password: req.body.password || req.usuario.password,             
 //         activo: false 
 //     }
+//     //let id = req.body._id;
+//     Usuario.findById({_id : req.body._id}, (err,userDB) => {
+//         if(err)
+//             throw err;
+//         if(!userDB){
+//             return res.json({
+//                 ok: false,
+//                 mensaje: `No existe usuario con documento ${req.body.documento}`
+//             });
+//         }
+//         if(!userDB.activo) {
+//             return res.json({
+//                 ok: false,
+//                 mensaje: `El usuario con documento ${req.body.documento} no esta activo`
+//             });
+//         }      
+//     });
 //     // Se entrega la información para actualizar el campo activo a false
-//     Usuario.findByIdAndUpdate( req.usuario._id, user, { new: true }, ( err, userDB) => {
+//     Usuario.findByIdAndUpdate( req.body._id, user, { new: true }, ( err, userDB) => {
 //         if( err ) throw err;
 //         if( !userDB  ) {
 //             return res.json({
 //                 ok: false,
-//                 mensaje: 'No existe un usuario con ese ID'
+//                 mensaje: `No existe un usuario con documento ${user.documento} y nombre ${user.nombre}`
 //             });
 //         }      
 //         res.json({
 //             ok: true,
-//             mensaje: 'Se elimino o inactivo correctamente el usuario'
+//             mensaje: `Se ha inactivado el usuario con documento ${user.documento} y nombre ${user.nombre}`
 //         });
 //     });   
 // });
