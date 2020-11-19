@@ -22,7 +22,7 @@ clienteRoutes.get('/', (req, res) => __awaiter(this, void 0, void 0, function* (
     let skip = pagina - 1;
     skip = skip * 10;
     const body = req.body;
-    const clientes = yield cliente_model_1.Cliente.find({ activo: body.activo })
+    const clientes = yield cliente_model_1.Cliente.find()
         //Muestra ordenado por nombre
         .sort({ nombre: 1 })
         .skip(skip)
@@ -35,6 +35,40 @@ clienteRoutes.get('/', (req, res) => __awaiter(this, void 0, void 0, function* (
         clientes
     });
 }));
+clienteRoutes.get('/:id', (req, res) => {
+    let id = req.params.id;
+    cliente_model_1.Cliente.findOne({ identificacion: id }, (err, clienteDB) => {
+        if (err)
+            throw err;
+        if (!clienteDB) {
+            return res.json({
+                ok: false,
+                mensaje: `No existe cliente con identificacion ${id}`
+            });
+        }
+        if (clienteDB.activo) {
+            let cliente = {
+                tipo: clienteDB.tipo,
+                identificacion: clienteDB.identificacion,
+                nombre: clienteDB.nombre,
+                telefono: clienteDB.telefono,
+                email: clienteDB.email,
+                direccion: clienteDB.direccion,
+                activo: clienteDB.activo
+            };
+            res.json({
+                ok: true,
+                cliente
+            });
+        }
+        else {
+            return res.json({
+                ok: false,
+                mensaje: `El cliente con identificacion ${id} no esta activo`
+            });
+        }
+    });
+});
 //Servicio Crear clientes
 clienteRoutes.post('/create', (req, res) => {
     const cliente = {
@@ -69,70 +103,54 @@ clienteRoutes.post('/create', (req, res) => {
         });
     });
 });
-//Actualizar Cliente
+//Actualizar proveedor
 clienteRoutes.post('/update', (req, res) => {
-    //userRoutes.post('/update', verificaToken,  (req: any, res: Response) => {
-    const cliente = {
-        tipo: req.body.tipo || req.cliente.tipo,
-        identificacion: req.body.identificacion || req.cliente.identificacion,
-        nombre: req.body.nombre || req.cliente.nombre,
-        telefono: req.body.telefono || req.cliente.telefono,
-        email: req.body.email || req.cliente.email,
-        direccion: req.body.direccion || req.cliente.direccion,
-        activo: req.body.obra || req.cliente.obra
-    };
-    // Se entrega la información para actualizar 
-    cliente_model_1.Cliente.findByIdAndUpdate(req.trabajador._id, cliente, { new: true }, (err, clienteDB) => {
+    //Buscamos que exista el proveedor
+    cliente_model_1.Cliente.findById({ _id: req.body._id }, (err, clienteDB) => {
+        // Si no se puede procesar el query se arroja un error
         if (err)
             throw err;
+        // Si el usuario no existe en la BD no se procede con la petición
         if (!clienteDB) {
             return res.json({
                 ok: false,
-                mensaje: 'No existe un cliente con ese ID'
+                mensaje: `No existe el cliente con _id ${req.body._id}`
             });
         }
-        const tokenUser = token_1.default.getJwtToken({
-            _id: clienteDB._id,
-            tipo: clienteDB.tipo,
-            identificacion: clienteDB.identificacion,
-            nombre: clienteDB.nombre,
-            telefono: clienteDB.telefono,
-            email: clienteDB.email,
-            direccion: clienteDB.direccion,
-            activo: clienteDB.activo
-        });
-        res.json({
-            ok: true,
-            token: tokenUser
-        });
-    });
-});
-//Eliminar Cliente
-//En este caso no se eliminara el registro si no que se pondra en un estado de inactivo
-clienteRoutes.post('/delete', (req, res) => {
-    //userRoutes.post('/delete', verificaToken,  (req: any, res: Response) => {
-    const cliente = {
-        _id: req.body._id || req.cliente._id,
-        activo: req.body.activo || req.cliente.activo
-    };
-    // Se entrega la información para actualizar el campo activo a false
-    cliente_model_1.Cliente.findByIdAndUpdate(req.trabajador._id, cliente, { new: true }, (err, clienteDB) => {
-        if (err)
-            throw err;
-        if (!clienteDB) {
+        ;
+        if (((!req.body.activo) || req.body.activo == 'false') && (!clienteDB.activo)) {
             return res.json({
                 ok: false,
-                mensaje: 'No existe un cliente con ese ID'
+                mensaje: `El cliente con _id ${req.body._id} no está activo`
             });
         }
-        const tokenUser = token_1.default.getJwtToken({
-            _id: clienteDB._id,
-            documento: clienteDB.identificacion,
-            activo: false
-        });
-        res.json({
-            ok: true,
-            token: tokenUser
+        const cliente = {
+            tipo: req.body.tipo || clienteDB.tipo,
+            identificacion: req.body.identificacion || clienteDB.identificacion,
+            nombre: req.body.nombre || clienteDB.nombre,
+            telefono: req.body.telefono || clienteDB.telefono,
+            email: req.body.email || clienteDB.email,
+            direccion: req.body.direccion || clienteDB.direccion,
+            activo: req.body.activo || clienteDB.activo,
+        };
+        console.log(cliente);
+        cliente_model_1.Cliente.updateOne({ _id: req.body._id }, cliente, { new: true }, (err, clienteUpdated) => {
+            if (err)
+                throw err;
+            const tokenCliente = token_1.default.getJwtToken({
+                tipo: cliente.tipo,
+                identificacion: cliente.identificacion,
+                nombre: cliente.nombre,
+                telefono: cliente.telefono,
+                email: cliente.email,
+                direccion: cliente.direccion,
+                activo: cliente.activo
+            });
+            res.json({
+                ok: true,
+                mensaje: `Se ha actualizado el cliente con documento ${cliente.identificacion}`,
+                token: tokenCliente
+            });
         });
     });
 });

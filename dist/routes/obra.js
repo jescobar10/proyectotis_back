@@ -22,7 +22,7 @@ obraRoutes.get('/', (req, res) => __awaiter(this, void 0, void 0, function* () {
     let skip = pagina - 1;
     skip = skip * 10;
     const body = req.body;
-    const obras = yield obra_model_1.Obra.find({ activo: body.activo })
+    const obras = yield obra_model_1.Obra.find()
         //Muestra ordenado por nombre de la obra
         .sort({ nombreObra: 1 })
         .skip(skip)

@@ -22,7 +22,7 @@ proveedorRoutes.get('/', (req, res) => __awaiter(this, void 0, void 0, function*
     let skip = pagina - 1;
     skip = skip * 10;
     const body = req.body;
-    const proveedores = yield proveedor_model_1.Proveedor.find({ activo: body.activo })
+    const proveedores = yield proveedor_model_1.Proveedor.find()
         //Muestra ordenado por nombre
         .sort({ nombre: 1 })
         .skip(skip)
@@ -35,11 +35,47 @@ proveedorRoutes.get('/', (req, res) => __awaiter(this, void 0, void 0, function*
         proveedores
     });
 }));
+//Retornar proveedor por id
+proveedorRoutes.get('/:id', (req, res) => {
+    let id = req.params.id;
+    proveedor_model_1.Proveedor.findOne({ identificacion: id }, (err, proveedorDB) => {
+        if (err)
+            throw err;
+        if (!proveedorDB) {
+            return res.json({
+                ok: false,
+                mensaje: `No existe proveedor con identificacion ${id}`
+            });
+        }
+        if (proveedorDB.activo) {
+            let proveedor = {
+                tipo: proveedorDB.tipo,
+                identificacion: proveedorDB.identificacion,
+                nombre: proveedorDB.nombre,
+                repreLegal: proveedorDB.repreLegal,
+                telefono: proveedorDB.telefono,
+                email: proveedorDB.email,
+                direccion: proveedorDB.direccion,
+                activo: proveedorDB.activo
+            };
+            res.json({
+                ok: true,
+                proveedor
+            });
+        }
+        else {
+            return res.json({
+                ok: false,
+                mensaje: `El proveedor con identificacion ${id} no esta activo`
+            });
+        }
+    });
+});
 //Servicio Crear Proveedor
 proveedorRoutes.post('/create', (req, res) => {
     const proveedor = {
         tipo: req.body.tipo,
-        identificacion: req.body.identicacion,
+        identificacion: req.body.identificacion,
         nombre: req.body.nombre,
         repreLegal: req.body.repreLegal,
         telefono: req.body.telefono,
@@ -73,70 +109,54 @@ proveedorRoutes.post('/create', (req, res) => {
 });
 //Actualizar proveedor
 proveedorRoutes.post('/update', (req, res) => {
-    //userRoutes.post('/update', verificaToken,  (req: any, res: Response) => {
-    const proveedor = {
-        tipo: req.body.tipo || req.proveedor.tipo,
-        identificacion: req.body.identificacion || req.proveedor.identificacion,
-        nombre: req.body.nombre || req.proveedor.nombre,
-        repreLegal: req.body.repreLegal || req.trabajador.repreLegal,
-        telefono: req.body.telefono || req.trabajador.telefono,
-        email: req.body.email || req.trabajador.email,
-        direccion: req.body.direccion || req.trabajador.direccion,
-        activo: req.body.activo || req.trabajador.activo
-    };
-    // Se entrega la información para actualizar 
-    proveedor_model_1.Proveedor.findByIdAndUpdate(req.proveedor._id, proveedor, { new: true }, (err, proveedorDB) => {
+    //Buscamos que exista el proveedor
+    proveedor_model_1.Proveedor.findById({ _id: req.body._id }, (err, proveedorDB) => {
+        // Si no se puede procesar el query se arroja un error
         if (err)
             throw err;
+        // Si el usuario no existe en la BD no se procede con la petición
         if (!proveedorDB) {
             return res.json({
                 ok: false,
-                mensaje: 'No existe un proveedor con ese ID'
+                mensaje: `No existe el proveedor con _id ${req.body._id}`
             });
         }
-        const tokenUser = token_1.default.getJwtToken({
-            _id: proveedorDB._id,
-            tipo: proveedorDB.tipo,
-            identificacion: proveedorDB.identificacion,
-            nombre: proveedorDB.nombre,
-            repreLegal: proveedorDB.repreLegal,
-            telefono: proveedorDB.telefono,
-            email: proveedorDB.email,
-            direccion: proveedorDB.direccion,
-            activo: proveedorDB.activo
-        });
-        res.json({
-            ok: true,
-            token: tokenUser
-        });
-    });
-});
-//Eliminar proveedor
-//En este caso no se eliminara el registro si no que se pondra en un estado de inactivo
-proveedorRoutes.post('/delete', (req, res) => {
-    //userRoutes.post('/delete', verificaToken,  (req: any, res: Response) => {
-    const user = {
-        _id: req.body._id || req.proveedor._id,
-        activo: req.body.activo || req.proveedor.activo
-    };
-    // Se entrega la información para actualizar el campo activo a false
-    proveedor_model_1.Proveedor.findByIdAndUpdate(req.proveedor._id, user, { new: true }, (err, proveedorDB) => {
-        if (err)
-            throw err;
-        if (!proveedorDB) {
+        ;
+        if (((!req.body.activo) || req.body.activo == 'false') && (!proveedorDB.activo)) {
             return res.json({
                 ok: false,
-                mensaje: 'No existe un trabajador con ese ID'
+                mensaje: `El proveedor con _id ${req.body._id} no está activo`
             });
         }
-        const tokenUser = token_1.default.getJwtToken({
-            _id: proveedorDB._id,
-            documento: proveedorDB.identificacion,
-            activo: false
-        });
-        res.json({
-            ok: true,
-            token: tokenUser
+        const proveedor = {
+            tipo: req.body.tipo || proveedorDB.tipo,
+            identificacion: req.body.identificacion || proveedorDB.identificacion,
+            nombre: req.body.nombre || proveedorDB.nombre,
+            repreLegal: req.body.repreLegal || proveedorDB.repreLegal,
+            telefono: req.body.telefono || proveedorDB.telefono,
+            email: req.body.email || proveedorDB.email,
+            direccion: req.body.direccion || proveedorDB.direccion,
+            activo: req.body.activo || proveedorDB.activo
+        };
+        console.log(proveedor);
+        proveedor_model_1.Proveedor.updateOne({ _id: req.body._id }, proveedor, { new: true }, (err, proveedorUpdated) => {
+            if (err)
+                throw err;
+            const tokenProveedor = token_1.default.getJwtToken({
+                tipo: proveedor.tipo,
+                identificacion: proveedor.identificacion,
+                nombre: proveedor.nombre,
+                repreLegal: proveedor.repreLegal,
+                telefono: proveedor.telefono,
+                email: proveedor.email,
+                direccion: proveedor.direccion,
+                activo: proveedor.activo
+            });
+            res.json({
+                ok: true,
+                mensaje: `Se ha actualizado el proveedor con documento ${proveedor.identificacion}`,
+                token: tokenProveedor
+            });
         });
     });
 });

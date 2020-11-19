@@ -22,7 +22,7 @@ materialRoutes.get('/', (req, res) => __awaiter(this, void 0, void 0, function* 
     let skip = pagina - 1;
     skip = skip * 10;
     const body = req.body;
-    const materiales = yield material_model_1.Material.find({ activo: body.activo })
+    const materiales = yield material_model_1.Material.find()
         //Muestra ordenado por las referencia
         .sort({ referencia: 1 })
         .skip(skip)

@@ -14,7 +14,7 @@ proveedorRoutes.get('/', async ( req: Request, res: Response ) =>{
 
     const body = req.body;
 
-    const proveedores =  await Proveedor.find(  )
+    const proveedores =  await Proveedor.find()
                                     //Muestra ordenado por nombre
                                     .sort( { nombre: 1 } )
                                     .skip( skip )
