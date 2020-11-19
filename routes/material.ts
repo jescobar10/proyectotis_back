@@ -14,7 +14,7 @@ materialRoutes.get('/', async ( req: Request, res: Response ) =>{
 
     const body = req.body;
 
-    const materiales =  await Material.find( {activo: body.activo} )
+    const materiales =  await Material.find(  )
                                     //Muestra ordenado por las referencia
                                     .sort( { referencia: 1 } )
                                     .skip( skip )

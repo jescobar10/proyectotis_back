@@ -33,8 +33,8 @@ server.app.use('/trabajador', trabajadorRoutes );
 
 //Conectar con base de datos
 //mongodb+srv://proyectotis_back:<password>@clustertis.jurio.mongodb.net/<dbname>?retryWrites=true&w=majority
-//mongoose.connect('mongodb://localhost:27017/bdtis', 
-mongoose.connect('mongodb+srv://proyectotis_back:Tis2020@clustertis.jurio.mongodb.net/<bdtis>?retryWrites=true&w=majority', 
+mongoose.connect('mongodb://localhost:27017/bdtis',  
+//mongoose.connect('mongodb+srv://proyectotis_back:Tis2020@clustertis.jurio.mongodb.net/<bdtis>?retryWrites=true&w=majority', 
 {
     useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true }, ( err ) => {
 

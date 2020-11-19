@@ -3,10 +3,12 @@ import { Schema, Document, model } from 'mongoose';
 const avanceObraSchema = new Schema({
 
     idObra:{
-            type: Schema.Types.ObjectId,
-            ref: 'Obra',
-            required: [ true, 'Debe de existir la Obra a la cual se le va a registrar el avance']
-    },
+    //         type: Schema.Types.ObjectId,
+    //         ref: 'Obra',
+    //         required: [ true, 'Debe de existir la Obra a la cual se le va a registrar el avance']
+    // 
+    type: String
+},
 
     fechaAvance:{
         type: Date
@@ -57,7 +59,7 @@ interface IAvanceObra extends Document {
     created: Date;
 }
 
-export const Post = model<IAvanceObra>('Post', avanceObraSchema);
+export const AvanceObra = model<IAvanceObra>('Post', avanceObraSchema);
 
 
 

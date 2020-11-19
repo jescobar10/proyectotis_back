@@ -81,7 +81,7 @@ obraRoutes.post('/update', (req, res) => {
         if (!obraDB) {
             return res.json({
                 ok: false,
-                mensaje: `No existe el obra con _id ${req.body._id}`
+                mensaje: `No existe la obra con _id ${req.body._id}`
             });
         }
         ;

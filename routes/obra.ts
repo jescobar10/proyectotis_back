@@ -14,7 +14,7 @@ obraRoutes.get('/', async ( req: Request, res: Response ) =>{
 
     const body = req.body;
 
-    const obras =  await Obra.find( {activo: body.activo} )
+    const obras =  await Obra.find(  )
                                     //Muestra ordenado por nombre de la obra
                                     .sort( { nombreObra: 1 } )
                                     .skip( skip )
