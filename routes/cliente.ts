@@ -111,6 +111,7 @@ clienteRoutes.post('/create', ( req: Request, res: Response ) =>{
 
 //Actualizar proveedor
 clienteRoutes.post('/update', (req: any, res: Response) => {
+    console.log("Entro al backEnd");
     //Buscamos que exista el proveedor
     Cliente.findById({_id:req.body._id}, (err,clienteDB) => {
         // Si no se puede procesar el query se arroja un error
@@ -132,6 +133,8 @@ clienteRoutes.post('/update', (req: any, res: Response) => {
         }
 
         const cliente = {
+
+            _id: req.body._id || clienteDB._id,
             tipo: req.body.tipo || clienteDB.tipo,
             identificacion: req.body.identificacion || clienteDB.identificacion,
             nombre: req.body.nombre || clienteDB.nombre,
@@ -148,6 +151,7 @@ clienteRoutes.post('/update', (req: any, res: Response) => {
             if( err ) throw err;
 
             const tokenCliente = Token.getJwtToken({
+                _id: cliente._id,
                 tipo: cliente.tipo,
                 identificacion: cliente.identificacion,
                 nombre: cliente.nombre,

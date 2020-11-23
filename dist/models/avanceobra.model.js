@@ -3,10 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = require("mongoose");
 const avanceObraSchema = new mongoose_1.Schema({
     idObra: {
-        //         type: Schema.Types.ObjectId,
-        //         ref: 'Obra',
-        //         required: [ true, 'Debe de existir la Obra a la cual se le va a registrar el avance']
-        // 
+        // type: Schema.Types.ObjectId,
+        // ref: 'Obra',
+        // required: [ true, 'Debe de existir la Obra a la cual se le va a registrar el avance']
         type: String
     },
     fechaAvance: {
@@ -25,6 +24,7 @@ const avanceObraSchema = new mongoose_1.Schema({
         type: String
     },
     usuario: {
+        //type: String
         type: mongoose_1.Schema.Types.ObjectId,
         ref: 'Usuario',
         required: [true, 'Debe de enviar el usuario quien creo el avance.']
@@ -33,8 +33,4 @@ const avanceObraSchema = new mongoose_1.Schema({
         type: Date
     }
 });
-avanceObraSchema.pre('save', function (next) {
-    this.created = new Date();
-    next();
-});
-exports.AvanceObra = mongoose_1.model('Post', avanceObraSchema);
+exports.AvanceObra = mongoose_1.model('AvanceObra', avanceObraSchema);

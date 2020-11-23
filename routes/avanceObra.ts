@@ -4,23 +4,26 @@ import { AvanceObra } from '../models/avanceobra.model';
 
 const avanceObraRoutes = Router();
 
-avanceObraRoutes.post('/', [ verificaToken], (req: any, res: Response) => {
+avanceObraRoutes.post('/', (req: any, res: Response) => {
     //avanceObraRoutes.post('/', [verificaToken], (req: any, res: Response) => {
 
     const body = req.body;
-    body.obra = req.obra._id;
+    //body.obra = req.obra._id;
 
-    AvanceObra.create( body ).then( avanceObraDB =>{
+    AvanceObra.create( body ).then( async avanceObraDB =>{
 
+        //Parte que envia todo el objeto usaurio no solo el Id
+       await avanceObraDB.populate('usuario', '-password').execPopulate();
+       // await avanceObraDB.populate('obra').execPopulate();
 
         res.json({
-            ok: true
+            ok: true,
+            avanceObra:avanceObraDB
         });
 
     }).catch( err => {
         res.json( err )
     });
-
 
 });
 

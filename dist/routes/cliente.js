@@ -105,6 +105,7 @@ clienteRoutes.post('/create', (req, res) => {
 });
 //Actualizar proveedor
 clienteRoutes.post('/update', (req, res) => {
+    console.log("Entro al backEnd");
     //Buscamos que exista el proveedor
     cliente_model_1.Cliente.findById({ _id: req.body._id }, (err, clienteDB) => {
         // Si no se puede procesar el query se arroja un error
@@ -125,6 +126,7 @@ clienteRoutes.post('/update', (req, res) => {
             });
         }
         const cliente = {
+            _id: req.body._id || clienteDB._id,
             tipo: req.body.tipo || clienteDB.tipo,
             identificacion: req.body.identificacion || clienteDB.identificacion,
             nombre: req.body.nombre || clienteDB.nombre,
@@ -138,6 +140,7 @@ clienteRoutes.post('/update', (req, res) => {
             if (err)
                 throw err;
             const tokenCliente = token_1.default.getJwtToken({
+                _id: cliente._id,
                 tipo: cliente.tipo,
                 identificacion: cliente.identificacion,
                 nombre: cliente.nombre,

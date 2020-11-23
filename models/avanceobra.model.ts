@@ -3,10 +3,10 @@ import { Schema, Document, model } from 'mongoose';
 const avanceObraSchema = new Schema({
 
     idObra:{
-    //         type: Schema.Types.ObjectId,
-    //         ref: 'Obra',
-    //         required: [ true, 'Debe de existir la Obra a la cual se le va a registrar el avance']
-    // 
+            // type: Schema.Types.ObjectId,
+            // ref: 'Obra',
+            // required: [ true, 'Debe de existir la Obra a la cual se le va a registrar el avance']
+    
     type: String
 },
 
@@ -31,22 +31,22 @@ const avanceObraSchema = new Schema({
     },
 
     usuario: {
-        type:Schema.Types.ObjectId,
-        ref: 'Usuario',
-        required: [true, 'Debe de enviar el usuario quien creo el avance.']
+        //type: String
+         type:Schema.Types.ObjectId,
+         ref: 'Usuario',
+         required: [true, 'Debe de enviar el usuario quien creo el avance.']
     },
 
     created: {
         type: Date
     }
 
-
 });
 
-avanceObraSchema.pre<IAvanceObra>('save', function( next ){
-    this.created = new Date();
-    next();
-});
+// avanceObraSchema.pre<IAvanceObra>('save', function( next ){
+//     this.created = new Date();
+//     next();
+// });
 
 interface IAvanceObra extends Document {
     idObra: String;
@@ -59,7 +59,7 @@ interface IAvanceObra extends Document {
     created: Date;
 }
 
-export const AvanceObra = model<IAvanceObra>('Post', avanceObraSchema);
+export const AvanceObra = model<IAvanceObra>('AvanceObra', avanceObraSchema);
 
 
 
