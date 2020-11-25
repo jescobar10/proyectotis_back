@@ -102,7 +102,6 @@ avanceObraRoutes.post('/uploadimg', [ verificaToken ], async (req: any, res: Res
 
 });
 
-
 avanceObraRoutes.get('/imagen/:avanceObraid/:img', (req: any, res: Response ) => {
 
     const avanceObraid = req.params.avanceObraid;
@@ -111,7 +110,6 @@ avanceObraRoutes.get('/imagen/:avanceObraid/:img', (req: any, res: Response ) =>
     const pathFoto = fileSystem.getFotoUrl( avanceObraid, img, "avanceObra" );
 
     res.sendFile( pathFoto );
-
 
 });
 

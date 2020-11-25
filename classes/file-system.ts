@@ -8,7 +8,7 @@ export default class FileSystem {
 
     constructor() { };
 
-    //guarda 
+    //guarda la imagen temporalmente
     guardarImagenTemporal( file: FileUpload, userId: string) {
 
         return new Promise(  (resolve, reject) => {

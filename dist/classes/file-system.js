@@ -9,7 +9,7 @@ const uniqid_1 = __importDefault(require("uniqid"));
 class FileSystem {
     constructor() { }
     ;
-    //guarda 
+    //guarda la imagen temporalmente
     guardarImagenTemporal(file, userId) {
         return new Promise((resolve, reject) => {
             // Crear carpetas
