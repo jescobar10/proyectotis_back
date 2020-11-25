@@ -1,6 +1,9 @@
 import Server from './classes/server';
 import mongoose from 'mongoose';
+
 import bodyParser from 'body-parser';
+//Imortación para subir imagenes y pdfs
+import fileUpload from 'express-fileupload';
 
 //Modulos 
 import userRoutes from './routes/usuario';
@@ -18,6 +21,9 @@ const server = new Server();
 //Body Parse : Para interprestar los post, get, etc
 server.app.use( bodyParser.urlencoded({ extended: true }));
 server.app.use( bodyParser.json());
+
+//FileUpload  -  Subir Imagenes y PDF
+server.app.use( fileUpload({ useTempFiles: true } ) );
 
 //Configuración del CORS
 server.app.use( cors({ origin: true, credentials: true }) );

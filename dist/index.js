@@ -6,6 +6,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const server_1 = __importDefault(require("./classes/server"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const body_parser_1 = __importDefault(require("body-parser"));
+//Imortación para subir imagenes y pdfs
+const express_fileupload_1 = __importDefault(require("express-fileupload"));
 //Modulos 
 const usuario_1 = __importDefault(require("./routes/usuario"));
 const avanceObra_1 = __importDefault(require("./routes/avanceObra"));
@@ -19,6 +21,8 @@ const server = new server_1.default();
 //Body Parse : Para interprestar los post, get, etc
 server.app.use(body_parser_1.default.urlencoded({ extended: true }));
 server.app.use(body_parser_1.default.json());
+//FileUpload  -  Subir Imagenes y PDF
+server.app.use(express_fileupload_1.default({ useTempFiles: true }));
 //Configuración del CORS
 server.app.use(cors_1.default({ origin: true, credentials: true }));
 //Definición de las rutas

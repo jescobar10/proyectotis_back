@@ -236,6 +236,18 @@ userRoutes.post('/update', (req: any, res: Response) => {
 });
 
 
+userRoutes.get('/', [ verificaToken], ( req: any, res: Response ) => {
+
+    const usuario = req.usuario;
+
+    res.json({
+        ok: true,
+        usuario
+    })
+
+});
+
+
 // Eliminar Usuario
 // En este caso no se eleiminara el registro si no que se pondra en un estado de inactivo
 // userRoutes.post('/delete', (req: any, res: Response) => {
