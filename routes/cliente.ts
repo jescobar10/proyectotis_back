@@ -113,7 +113,7 @@ clienteRoutes.post('/create', ( req: Request, res: Response ) =>{
 clienteRoutes.post('/update', (req: any, res: Response) => {
     console.log("Entro al backEnd");
     //Buscamos que exista el proveedor
-    Cliente.findById({_id:req.body._id}, (err,clienteDB) => {
+    Cliente.findById({identificacion:req.body.identificacion}, (err,clienteDB) => {
         // Si no se puede procesar el query se arroja un error
         if(err)
             throw err;
@@ -122,13 +122,13 @@ clienteRoutes.post('/update', (req: any, res: Response) => {
         if(!clienteDB){
             return res.json({
                 ok: false,
-                mensaje: `No existe el cliente con _id ${req.body._id}`
+                mensaje: `No existe el cliente con _id ${req.body.identificacion}`
             });
         };
         if(((!req.body.activo) || req.body.activo == 'false') && (!clienteDB.activo)){
             return res.json({
                 ok: false,
-                mensaje: `El cliente con _id ${req.body._id} no está activo`
+                mensaje: `El cliente con _id ${req.body.identificacion} no está activo`
             });
         }
 
@@ -146,7 +146,7 @@ clienteRoutes.post('/update', (req: any, res: Response) => {
 
         console.log(cliente);
         
-        Cliente.updateOne( {_id:req.body._id}, cliente, { new: true }, ( err, clienteUpdated) => {
+        Cliente.updateOne( {identificacion:req.body.identificacion}, cliente, { new: true }, ( err, clienteUpdated) => {
 
             if( err ) throw err;
 
