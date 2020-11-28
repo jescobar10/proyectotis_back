@@ -29,13 +29,20 @@ const obraSchema = new Schema( {
    },
    
    //PDF
-   regPlano: {
+   regPlano: [{
         type: String
-   },
+   }],
 
    activo: {
     type: Boolean
-}
+},
+
+usuario: {
+    //type: String
+     type:Schema.Types.ObjectId,
+     ref: 'Usuario',
+     required: [true, 'Debe de enviar el usuario quien creo el avance.']
+},
 
 });
 

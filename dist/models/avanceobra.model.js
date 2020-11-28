@@ -20,9 +20,9 @@ const avanceObraSchema = new mongoose_1.Schema({
     coords: {
         type: String //Latitud -12.88 , 14,6716 
     },
-    plano: {
-        type: String
-    },
+    plano: [{
+            type: String
+        }],
     usuario: {
         //type: String
         type: mongoose_1.Schema.Types.ObjectId,

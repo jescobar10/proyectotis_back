@@ -84,7 +84,7 @@ avanceObraRoutes.post('/uploadimg', [ verificaToken ], async (req: any, res: Res
         });
     }
 
-    //si no es ni imagen ni pdf
+    //si no es ni imagen 
     if( !file.mimetype.includes('image')){
         //if( !file.mimetype.includes('image') || !file.mimetype.includes('pdf')){
         return res.status(400).json({
@@ -106,6 +106,59 @@ avanceObraRoutes.get('/imagen/:avanceObraid/:img', (req: any, res: Response ) =>
 
     const avanceObraid = req.params.avanceObraid;
     const img = req.params.img;
+
+    const pathFoto = fileSystem.getFotoUrl( avanceObraid, img, "avanceObra" );
+
+    res.sendFile( pathFoto );
+
+});
+
+// PDF
+// ---------------------------------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------------------------
+
+///Se definen las rutas o servicios para subir archivos (pdf)
+avanceObraRoutes.post('/uploadpdf', [ verificaToken ], async (req: any, res: Response) =>  {
+   
+    //Se valida si viene algun archivo 
+    if( !req.files ) {
+        return res.status(400).json({
+            ok: false,
+            mensaje: 'No se subio ningun archivo'
+        });
+    }
+
+    //Se sube el archivo
+    const file: FileUpload = req.files.pdf;
+
+    if( !file ) {
+        return res.status(400).json({
+            mensaje: 'No se subio ningun archivo'
+        });
+    }
+
+    //si no es ni imagen ni pdf
+    if( !file.mimetype.includes('pdf')){
+        //if( !file.mimetype.includes('image') || !file.mimetype.includes('pdf')){
+        return res.status(400).json({
+            mensaje: 'Lo que subio no es una imagen'
+        });
+    }
+
+
+   await fileSystem.guardarImagenTemporal( file, req.usuario._id );
+   
+    res.json({
+        ok: true,
+        file: file.mimetype
+    });
+
+});
+
+avanceObraRoutes.get('/imagen/:avanceObraid/:pdf', (req: any, res: Response ) => {
+
+    const avanceObraid = req.params.avanceObraid;
+    const img = req.params.pdf;
 
     const pathFoto = fileSystem.getFotoUrl( avanceObraid, img, "avanceObra" );
 

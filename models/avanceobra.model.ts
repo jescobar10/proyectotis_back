@@ -26,9 +26,9 @@ const avanceObraSchema = new Schema({
         type: String //Latitud -12.88 , 14,6716 
     },
 
-    plano: {
+    plano: [{
         type: String
-    },
+    }],
 
     usuario: {
         //type: String

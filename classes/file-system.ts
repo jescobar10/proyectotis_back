@@ -71,6 +71,7 @@ export default class FileSystem {
         return pathUserTemp;
 
     }
+     
 
     //Pasa las imagenes de TEMP hacias el modulo correspondiente
     imagenesDeTempHaciaModulo( userId: string, modulo: string ) {

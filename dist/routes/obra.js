@@ -14,7 +14,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const obra_model_1 = require("../models/obra.model");
 const token_1 = __importDefault(require("../classes/token"));
+const file_system_1 = __importDefault(require("../classes/file-system"));
+const autenticacion_1 = require("../middlewares/autenticacion");
 const obraRoutes = express_1.Router();
+//Se define el filesystem que va a permitir subir los archivos img / pdf
+const fileSystem = new file_system_1.default();
 //Listar las obras paginadas
 obraRoutes.get('/', (req, res) => __awaiter(this, void 0, void 0, function* () {
     //Se solicita el numero de pagina , parametro opcional
@@ -36,38 +40,61 @@ obraRoutes.get('/', (req, res) => __awaiter(this, void 0, void 0, function* () {
     });
 }));
 //Servicio Crear Obras
-obraRoutes.post('/create', (req, res) => {
-    const obra = {
-        identObra: req.body.identObra,
-        nombreObra: req.body.nombreObra,
-        descripcion: req.body.descripcion,
-        fechaInicio: req.body.fechaInicio,
-        fechaFin: req.body.fechaFin,
-        regPlano: req.body.regPlano,
-        activo: req.body.activo
-    };
+obraRoutes.post('/', [autenticacion_1.verificaToken], (req, res) => {
+    const body = req.body;
+    body.usuario = req.usuario._id;
+    //Para subir varios archivos 
+    const pdfs = fileSystem.imagenesDeTempHaciaModulo(req.usuario._id, "obra");
+    console.log('Nombre de Pdf cargado: ' + pdfs);
+    body.regPlano = pdfs;
+    console.log('objeto enviado: ' + body);
     //Se crea el obra en Base de datos
-    obra_model_1.Obra.create(obra).then(obraDB => {
-        const tokenUser = token_1.default.getJwtToken({
-            _id: obraDB._id,
-            identObra: obraDB.identObra,
-            nombreObra: obraDB.nombreObra,
-            descripcion: obraDB.descripcion,
-            fechaInicio: obraDB.fechaInicio,
-            fechaFin: obraDB.fechaFin,
-            regPlano: obraDB.regPlano,
-            activo: obraDB.activo
-        });
+    obra_model_1.Obra.create(body).then((obraDB) => __awaiter(this, void 0, void 0, function* () {
+        yield obraDB.populate('usuario', '-password').execPopulate();
         res.json({
             ok: true,
-            token: tokenUser
+            obra: obraDB
         });
-    }).catch(err => {
+    })).catch(err => {
         res.json({
             ok: false,
             err
         });
     });
+});
+///Se definen las rutas o servicios para subir archivos ( pdf)
+obraRoutes.post('/uploadpdf', [autenticacion_1.verificaToken], (req, res) => __awaiter(this, void 0, void 0, function* () {
+    //Se valida si viene algun archivo 
+    if (!req.files) {
+        return res.status(400).json({
+            ok: false,
+            mensaje: 'No se subio ningun archivo'
+        });
+    }
+    //Se sube el archivo
+    const file = req.files.pdf;
+    if (!file) {
+        return res.status(400).json({
+            mensaje: 'No se subio ningun archivo'
+        });
+    }
+    //si no es ni imagen ni pdf
+    if (!file.mimetype.includes('pdf')) {
+        return res.status(400).json({
+            mensaje: 'Lo que subio no es un pdf'
+        });
+    }
+    yield fileSystem.guardarImagenTemporal(file, req.usuario._id);
+    res.json({
+        ok: true,
+        file: file.mimetype
+    });
+}));
+obraRoutes.get('/pdf/:obraid/:pdf', (req, res) => {
+    const obraid = req.params.obraid;
+    const pdf = req.params.pdf;
+    const pathFoto = fileSystem.getFotoUrl(obraid, pdf, "obra");
+    res.sendFile(pathFoto);
 });
 //Actualizar Obra
 obraRoutes.post('/update', (req, res) => {

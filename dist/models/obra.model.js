@@ -23,12 +23,18 @@ const obraSchema = new mongoose_1.Schema({
         required: [true, 'La fecha de Finalización de la obra es necesaria.']
     },
     //PDF
-    regPlano: {
-        type: String
-    },
+    regPlano: [{
+            type: String
+        }],
     activo: {
         type: Boolean
-    }
+    },
+    usuario: {
+        //type: String
+        type: mongoose_1.Schema.Types.ObjectId,
+        ref: 'Usuario',
+        required: [true, 'Debe de enviar el usuario quien creo el avance.']
+    },
 });
 //Se exporta el modelo de Obra
 exports.Obra = mongoose_1.model('Obra', obraSchema);

@@ -23,6 +23,7 @@ server.app.use(body_parser_1.default.urlencoded({ extended: true }));
 server.app.use(body_parser_1.default.json());
 //FileUpload  -  Subir Imagenes y PDF
 server.app.use(express_fileupload_1.default({ useTempFiles: true }));
+//server.app.use( fileUpload() );
 //Configuración del CORS
 server.app.use(cors_1.default({ origin: true, credentials: true }));
 //Definición de las rutas

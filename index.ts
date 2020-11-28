@@ -24,6 +24,7 @@ server.app.use( bodyParser.json());
 
 //FileUpload  -  Subir Imagenes y PDF
 server.app.use( fileUpload({ useTempFiles: true } ) );
+//server.app.use( fileUpload() );
 
 //Configuración del CORS
 server.app.use( cors({ origin: true, credentials: true }) );
