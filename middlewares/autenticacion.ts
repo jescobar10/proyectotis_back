@@ -5,7 +5,9 @@ import Token  from '../classes/token';
 export const verificaToken = ( req: any, res: Response, next: NextFunction ) => {
 
     //X-token en el Header
-    const userToken = req.get('x-token') || '';
+    const userToken = req.get('Authorization') || '';
+
+    console.log(userToken);
 
     Token.comprobarToken( userToken )
     .then( (decoded: any) => {

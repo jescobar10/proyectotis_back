@@ -6,7 +6,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const token_1 = __importDefault(require("../classes/token"));
 exports.verificaToken = (req, res, next) => {
     //X-token en el Header
-    const userToken = req.get('x-token') || '';
+    const userToken = req.get('Authorization') || '';
+    console.log(userToken);
     token_1.default.comprobarToken(userToken)
         .then((decoded) => {
         console.log('Decoded', decoded);

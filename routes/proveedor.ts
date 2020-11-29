@@ -46,6 +46,7 @@ proveedorRoutes.get('/:id', (req: Request, res: Response) => {
         if( proveedorDB.activo) {
 
             let proveedor = {
+                _id               : proveedorDB._id,
                 tipo              : proveedorDB.tipo,        
                 identificacion    : proveedorDB.identificacion,
                 nombre            : proveedorDB.nombre,
