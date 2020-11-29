@@ -125,5 +125,19 @@ export default class FileSystem {
         return pathFoto;
     }
 
+    getPDFUrl( userId: string, pdf: string, modulo: string ) {
+
+        // Path POSTs
+        const pathFoto = path.resolve( __dirname, '../uploads', userId, modulo, pdf );
+
+        // Si la imagen existe
+        const existe = fs.existsSync( pathFoto );
+        if ( !existe ) {
+            return path.resolve( __dirname, '../assets/400x250.jpg' );
+        }
+
+        return pathFoto;
+    }
+
 
 }

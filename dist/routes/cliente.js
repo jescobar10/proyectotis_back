@@ -126,9 +126,11 @@ clienteRoutes.post('/update', (req, res) => {
             });
         }
         const cliente = {
+            //Se debe de entregar para realizar le update
             _id: req.body._id || clienteDB._id,
             tipo: req.body.tipo || clienteDB.tipo,
-            identificacion: req.body.identificacion || clienteDB.identificacion,
+            //LLave primararia no se actualiza 
+            identificacion: clienteDB.identificacion,
             nombre: req.body.nombre || clienteDB.nombre,
             telefono: req.body.telefono || clienteDB.telefono,
             email: req.body.email || clienteDB.email,

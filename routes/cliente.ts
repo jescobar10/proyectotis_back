@@ -113,7 +113,7 @@ clienteRoutes.post('/create', ( req: Request, res: Response ) =>{
 clienteRoutes.post('/update', (req: any, res: Response) => {
     console.log("Entro al backEnd");
     //Buscamos que exista el proveedor
-    Cliente.findById({identificacion:req.body.identificacion}, (err,clienteDB) => {
+    Cliente.findById({_id:req.body._id}, (err,clienteDB) => {
         // Si no se puede procesar el query se arroja un error
         if(err)
             throw err;
@@ -122,21 +122,23 @@ clienteRoutes.post('/update', (req: any, res: Response) => {
         if(!clienteDB){
             return res.json({
                 ok: false,
-                mensaje: `No existe el cliente con _id ${req.body.identificacion}`
+                mensaje: `No existe el cliente con _id ${req.body._id}`
             });
         };
         if(((!req.body.activo) || req.body.activo == 'false') && (!clienteDB.activo)){
             return res.json({
                 ok: false,
-                mensaje: `El cliente con _id ${req.body.identificacion} no está activo`
+                mensaje: `El cliente con _id ${req.body._id} no está activo`
             });
         }
 
         const cliente = {
 
+            //Se debe de entregar para realizar le update
             _id: req.body._id || clienteDB._id,
             tipo: req.body.tipo || clienteDB.tipo,
-            identificacion: req.body.identificacion || clienteDB.identificacion,
+            //LLave primararia no se actualiza 
+            identificacion: clienteDB.identificacion,
             nombre: req.body.nombre || clienteDB.nombre,
             telefono: req.body.telefono || clienteDB.telefono,
             email: req.body.email || clienteDB.email,
@@ -146,7 +148,7 @@ clienteRoutes.post('/update', (req: any, res: Response) => {
 
         console.log(cliente);
         
-        Cliente.updateOne( {identificacion:req.body.identificacion}, cliente, { new: true }, ( err, clienteUpdated) => {
+        Cliente.updateOne( {_id:req.body._id}, cliente, { new: true }, ( err, clienteUpdated) => {
 
             if( err ) throw err;
 

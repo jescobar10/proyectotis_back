@@ -93,8 +93,8 @@ obraRoutes.post('/uploadpdf', [autenticacion_1.verificaToken], (req, res) => __a
 obraRoutes.get('/pdf/:obraid/:pdf', (req, res) => {
     const obraid = req.params.obraid;
     const pdf = req.params.pdf;
-    const pathFoto = fileSystem.getFotoUrl(obraid, pdf, "obra");
-    res.sendFile(pathFoto);
+    const pathPDF = fileSystem.getPDFUrl(obraid, pdf, "obra");
+    res.sendFile(pathPDF);
 });
 //Actualizar Obra
 obraRoutes.post('/update', (req, res) => {

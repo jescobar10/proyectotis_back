@@ -108,9 +108,9 @@ obraRoutes.get('/pdf/:obraid/:pdf', (req: any, res: Response ) => {
     const obraid = req.params.obraid;
     const pdf = req.params.pdf;
 
-    const pathFoto = fileSystem.getFotoUrl( obraid, pdf, "obra" );
+    const pathPDF = fileSystem.getPDFUrl( obraid, pdf, "obra" );
 
-    res.sendFile( pathFoto );
+    res.sendFile( pathPDF );
 
 });
 
