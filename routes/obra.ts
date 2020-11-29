@@ -56,7 +56,7 @@ obraRoutes.post('/', [verificaToken], ( req: any, res: Response ) =>{
       
         res.json({
             ok: true,
-            obra: obraDB
+            obra: obraDB._id
         });
         
     }).catch( err => {

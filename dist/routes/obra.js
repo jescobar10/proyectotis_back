@@ -53,7 +53,7 @@ obraRoutes.post('/', [autenticacion_1.verificaToken], (req, res) => {
         yield obraDB.populate('usuario', '-password').execPopulate();
         res.json({
             ok: true,
-            obra: obraDB
+            obra: obraDB._id
         });
     })).catch(err => {
         res.json({

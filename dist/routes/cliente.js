@@ -48,6 +48,7 @@ clienteRoutes.get('/:id', (req, res) => {
         }
         if (clienteDB.activo) {
             let cliente = {
+                _id: clienteDB._id,
                 tipo: clienteDB.tipo,
                 identificacion: clienteDB.identificacion,
                 nombre: clienteDB.nombre,
