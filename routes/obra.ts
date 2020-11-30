@@ -37,6 +37,8 @@ obraRoutes.get('/', async ( req: Request, res: Response ) =>{
 //Servicio Crear Obras
 obraRoutes.post('/', [verificaToken], ( req: any, res: Response ) =>{
 
+    console.log('Ingreso al guardar obra');
+
     const body = req.body;
     body.usuario = req.usuario._id;
        
@@ -70,7 +72,10 @@ obraRoutes.post('/', [verificaToken], ( req: any, res: Response ) =>{
 
 ///Se definen las rutas o servicios para subir archivos ( pdf)
 obraRoutes.post('/uploadpdf', [ verificaToken ], async (req: any, res: Response) =>  {
-   
+    
+    console.log('Back Archivos Subidos : ' + req.files );
+    console.log('Back Archivos Req : ' + req.pdf );
+
     //Se valida si viene algun archivo 
     if( !req.files ) {
         return res.status(400).json({

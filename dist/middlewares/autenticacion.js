@@ -7,7 +7,7 @@ const token_1 = __importDefault(require("../classes/token"));
 exports.verificaToken = (req, res, next) => {
     //X-token en el Header
     const userToken = req.get('Authorization') || '';
-    console.log(userToken);
+    console.log('Este es el tocken: ' + userToken);
     token_1.default.comprobarToken(userToken)
         .then((decoded) => {
         console.log('Decoded', decoded);

@@ -7,7 +7,7 @@ export const verificaToken = ( req: any, res: Response, next: NextFunction ) => 
     //X-token en el Header
     const userToken = req.get('Authorization') || '';
 
-    console.log(userToken);
+    console.log('Este es el tocken: ' + userToken);
 
     Token.comprobarToken( userToken )
     .then( (decoded: any) => {
