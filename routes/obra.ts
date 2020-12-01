@@ -34,6 +34,21 @@ obraRoutes.get('/', async ( req: Request, res: Response ) =>{
     });
 });
 
+//Listar las obras para drop
+obraRoutes.get('/listarObras', async ( req: Request, res: Response ) =>{
+  
+    const body = req.body;
+
+    const obras =  await Obra.find(  )
+                                    //Muestra ordenado por nombre de la obra
+                                    .sort( { nombreObra: 1 } )                  
+                                    .exec();
+
+    res.json({      
+        obras
+    });
+});
+
 //Servicio Crear Obras
 obraRoutes.post('/', [verificaToken], ( req: any, res: Response ) =>{
 

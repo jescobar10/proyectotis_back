@@ -39,6 +39,17 @@ obraRoutes.get('/', (req, res) => __awaiter(this, void 0, void 0, function* () {
         obras
     });
 }));
+//Listar las obras para drop
+obraRoutes.get('/listarObras', (req, res) => __awaiter(this, void 0, void 0, function* () {
+    const body = req.body;
+    const obras = yield obra_model_1.Obra.find()
+        //Muestra ordenado por nombre de la obra
+        .sort({ nombreObra: 1 })
+        .exec();
+    res.json({
+        obras
+    });
+}));
 //Servicio Crear Obras
 obraRoutes.post('/', [autenticacion_1.verificaToken], (req, res) => {
     console.log('Ingreso al guardar obra');
