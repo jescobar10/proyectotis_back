@@ -1,5 +1,6 @@
 import { Schema, Document, model } from 'mongoose';
 import { Material } from './material.model';
+import { Proveedor } from './proveedor.model';
 
 const materialEntradaSchema = new Schema({
     
@@ -7,6 +8,12 @@ const materialEntradaSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Material',
         required: [true, "Debe estar ligado el material al cual se va a registrar la entrada"]
+    },
+
+    idProveedor:{
+        type: Schema.Types.ObjectId,
+        ref: 'Proveedor',
+        required: [true, "Debe estar ligado un proveedor a la entrada que se desea registrar"]
     },
 
     fecha:{
@@ -22,6 +29,7 @@ const materialEntradaSchema = new Schema({
 
 interface IMaterialEntrada extends Document{
     idMaterial: String;
+    idProveedor: String;
     fecha: Date;
     cantidad: Number
 }

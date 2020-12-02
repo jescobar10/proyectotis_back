@@ -93,6 +93,7 @@ interface MaterialSalida {
 //Interface Modelo material entrada
 interface MaterialEntrada {
     idMaterial: String;
+    idProveedor: String;
     fecha: Date;
     cantidad: Number
 }
