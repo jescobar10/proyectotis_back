@@ -81,3 +81,18 @@ interface AvanceObra {
     usuario: String;
     created: Date;
 }
+
+//Interface Modelo material salida
+interface MaterialSalida {
+    idObra: String;
+    idMaterial: String;
+    fecha: Date;
+    cantidad: Number
+}
+
+//Interface Modelo material entrada
+interface MaterialEntrada {
+    idMaterial: String;
+    fecha: Date;
+    cantidad: Number
+}
