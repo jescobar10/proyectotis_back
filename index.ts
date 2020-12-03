@@ -17,6 +17,7 @@ import proveedorRoutes from './routes/proveedor';
 import trabajadorRoutes from './routes/trabajador';
 import materialEntradaRoutes from './routes/materialEntrada';
 import materialSalidaRoutes from './routes/materialSalida';
+import trabajadorObraRoutes from './routes/trabajador_obra';
 
 const server = new Server();
 
@@ -41,6 +42,7 @@ server.app.use('/proveedor', proveedorRoutes );
 server.app.use('/trabajador', trabajadorRoutes );
 server.app.use('/materialentrada', materialEntradaRoutes);
 server.app.use('/materialsalida', materialSalidaRoutes);
+server.app.use('/trabajadorobra', trabajadorObraRoutes);
 
 //Conectar con base de datos
 //mongodb+srv://proyectotis_back:<password>@clustertis.jurio.mongodb.net/<dbname>?retryWrites=true&w=majority

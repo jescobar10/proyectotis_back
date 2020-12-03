@@ -18,7 +18,7 @@ materialSalidaRoutes.get('/', async ( req: Request, res: Response ) =>{
     const body = req.body;
 
     const entradas = await MaterialSalida.find()
-                                          .sort( {Fecha:1} )
+                                          .sort( {fecha:1} )
                                           .skip(skip)
                                           .limit(10)
                                           .exec();

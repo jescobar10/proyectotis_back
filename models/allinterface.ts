@@ -97,3 +97,9 @@ interface MaterialEntrada {
     fecha: Date;
     cantidad: Number
 }
+
+interface TrabajadorObra {
+    idTrabajador: String;
+    idObra: String;
+    fecha: String
+}
