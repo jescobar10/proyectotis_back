@@ -115,6 +115,7 @@ materialEntradaRoutes.post('/create', async(req:Request,res:Response) => {
         const tokenEntrada = Token.getJwtToken({
             _id:entradaDB._id,
             idMaterial:entradaDB.idMaterial,
+            idProveedor:entradaDB.idProveedor,
             fecha:entradaDB.fecha,
             cantidad:entradaDB.cantidad
         });
@@ -203,7 +204,7 @@ materialEntradaRoutes.post('/update', async(req: any, res: Response) => {
         })
     }
 
-    if(entrada.cantidad != undefined && entrada.cantidad != entradaBD.cantidad){
+    if(entrada.cantidad != undefined && Number(entrada.cantidad) != Number(entradaBD.cantidad)){
         let nueva_cantidad = Number(material.cantidad) + (Number(entrada.cantidad) - Number(entradaBD.cantidad));
         if(nueva_cantidad < 0){
             return res.json({
