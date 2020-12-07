@@ -17,7 +17,7 @@ const materialSalidaSchema = new Schema({
     },
 
     fecha:{
-        type: Date,
+        type: String,
         required: [true, "Se debe registrar la fecha de la salida del material"]
     },
 
@@ -30,8 +30,8 @@ const materialSalidaSchema = new Schema({
 interface IMaterialSalida extends Document{
     idMaterial: String;
     idObra: String;
-    fecha: Date;
-    cantidad: Number
+    fecha: String;
+    cantidad: Number;
 }
 
 export const MaterialSalida = model<IMaterialSalida>('MaterialesSalida',materialSalidaSchema);

@@ -4,6 +4,7 @@ import Token from '../classes/token';
 import { FileUpload } from '../interfaces/file-upload';
 import FileSystem from '../classes/file-system';
 import { verificaToken } from '../middlewares/autenticacion';
+import { Cliente } from '../models/cliente.model';
 
 const obraRoutes = Router();
 //Se define el filesystem que va a permitir subir los archivos img / pdf
@@ -56,6 +57,7 @@ obraRoutes.post('/', [verificaToken], ( req: any, res: Response ) =>{
 
     const body = req.body;
     body.usuario = req.usuario._id;
+    body.cliente = req.body.cliente;
        
     //Para subir varios archivos 
     const pdfs =  fileSystem.imagenesDeTempHaciaModulo( req.usuario._id, "obra" );

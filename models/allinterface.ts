@@ -21,7 +21,6 @@ interface Trabajador {
     email: String;
     direccion: string;
     cargo: String;
-    //obra: String;   
     activo: Boolean;     
 }
 
@@ -46,7 +45,6 @@ interface Cliente {
     telefono: String;
     email: String;
     direccion: String;    
-    //obra: String;   
     activo: Boolean;     
 }
 
@@ -58,6 +56,7 @@ interface obra {
     fechaInicio: Date;
     fechaFin: Date;
     regPlano: String;
+    cliente: String;
     activo: Boolean;         
 }
 
@@ -67,7 +66,7 @@ interface Material {
     referencia: String;
     unidadMedida: String;
     precio: Number;
-    activo: Boolean
+    activo: Boolean;
 }
 
 //Interface Modelo avance de obra
@@ -86,20 +85,20 @@ interface AvanceObra {
 interface MaterialSalida {
     idMaterial: String;
     idObra: String;
-    fecha: Date;
-    cantidad: Number
+    fecha: String;
+    cantidad: Number;
 }
 
 //Interface Modelo material entrada
 interface MaterialEntrada {
     idMaterial: String;
     idProveedor: String;
-    fecha: Date;
-    cantidad: Number
+    fecha: String;
+    cantidad: Number;
 }
 
 interface TrabajadorObra {
     idTrabajador: String;
     idObra: String;
-    fecha: String
+    fecha: String;
 }

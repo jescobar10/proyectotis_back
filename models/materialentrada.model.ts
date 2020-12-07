@@ -17,7 +17,7 @@ const materialEntradaSchema = new Schema({
     },
 
     fecha:{
-        type: Date,
+        type: String,
         required: [true, "Se debe registrar la fecha de la entrada del material"]
     },
 
@@ -30,7 +30,7 @@ const materialEntradaSchema = new Schema({
 interface IMaterialEntrada extends Document{
     idMaterial: String;
     idProveedor: String;
-    fecha: Date;
+    fecha: String;
     cantidad: Number
 }
 

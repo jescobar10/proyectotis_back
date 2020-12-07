@@ -1,4 +1,5 @@
 import {  Schema, model, Document }  from 'mongoose';
+import { Cliente } from './cliente.model';
 
 
 const obraSchema = new Schema( {
@@ -33,6 +34,13 @@ const obraSchema = new Schema( {
         type: String
    }],
 
+   //Relacion Cliente
+   cliente: {
+       type: Schema.Types.ObjectId,
+       ref: 'Cliente',
+       required: [true, 'Se debe vincular un cliente a la obra']
+   },
+
    activo: {
     type: Boolean
 },
@@ -55,6 +63,7 @@ interface Iobra extends Document {
     fechaInicio: Date;
     fechaFin: Date;
     regPlano: String;
+    cliente: String;
     activo: Boolean;
 }
 
