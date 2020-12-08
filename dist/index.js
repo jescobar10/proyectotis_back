@@ -18,6 +18,7 @@ const obra_1 = __importDefault(require("./routes/obra"));
 const proveedor_1 = __importDefault(require("./routes/proveedor"));
 const trabajador_1 = __importDefault(require("./routes/trabajador"));
 const server = new server_1.default();
+const port = process.env.PORT || 3001;
 //Body Parse : Para interprestar los post, get, etc
 server.app.use(body_parser_1.default.urlencoded({ extended: true }));
 server.app.use(body_parser_1.default.json());
@@ -48,7 +49,7 @@ mongoose_1.default.connect('mongodb+srv://proyectotis_back:Tis2020@clustertis.ju
 });
 //Se levanta express
 server.start(() => {
-    console.log(`Servidor corriendo en puerto ${server.port}`);
+    console.log(`Servidor corriendo en puerto ${port}`);
 });
 // const MongoClient = require('mongodb').MongoClient;
 // const uri = "mongodb+srv://proyectotis_back:<password>@clustertis.jurio.mongodb.net/<dbname>?retryWrites=true&w=majority";

@@ -20,6 +20,7 @@ import materialSalidaRoutes from './routes/materialSalida';
 import trabajadorObraRoutes from './routes/trabajador_obra';
 
 const server = new Server();
+const port = process.env.PORT || 3001;
 
 //Body Parse : Para interprestar los post, get, etc
 server.app.use( bodyParser.urlencoded({ extended: true }));
@@ -58,7 +59,7 @@ mongoose.connect('mongodb+srv://proyectotis_back:Tis2020@clustertis.jurio.mongod
 
 //Se levanta express
 server.start( () => {
-    console.log(`Servidor corriendo en puerto ${ server.port }`); 
+    console.log(`Servidor corriendo en puerto ${ port }`); 
 
 } );
 
