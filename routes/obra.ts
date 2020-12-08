@@ -51,13 +51,29 @@ obraRoutes.get('/listarObras', async ( req: Request, res: Response ) =>{
 });
 
 //Servicio Crear Obras
-obraRoutes.post('/', [verificaToken], ( req: any, res: Response ) =>{
+obraRoutes.post('/', [verificaToken], async( req: any, res: Response ) =>{
 
     console.log('Ingreso al guardar obra');
 
     const body = req.body;
     body.usuario = req.usuario._id;
-    body.cliente = req.body.cliente;
+    const clienteId = body.cliente;
+
+    const cliente = await Cliente.findOne({_id:clienteId})
+    .then(clienteDB => {
+        console.log(clienteDB);
+        return clienteDB;
+    }).catch(err => {
+        console.log(err);
+        return undefined;
+    })
+
+    if(!cliente){
+        return res.json({
+            ok:false,
+            mensaje:`Ha existido un error con el ciente _id: ${ clienteId }`
+        });
+    }
        
     //Para subir varios archivos 
     const pdfs =  fileSystem.imagenesDeTempHaciaModulo( req.usuario._id, "obra" );
@@ -142,7 +158,7 @@ obraRoutes.post('/update', (req: any, res: Response) => {
     //userRoutes.post('/update', verificaToken,  (req: any, res: Response) => {
 
     //Buscamos que exista la obra
-    Obra.findById({_id:req.body._id}, (err,obraDB) => {
+    Obra.findById({_id:req.body._id}, async (err,obraDB) => {
         // Si no se puede procesar el query se arroja un error
         if(err)
             throw err;
@@ -169,8 +185,25 @@ obraRoutes.post('/update', (req: any, res: Response) => {
         descripcion: req.body.descripcion || obraDB.descripcion,
         fechaInicio: req.body.fechaInicio || obraDB.fechaInicio,
         fechaFin: req.body.fechaFin || obraDB.fechaFin,
-        regPlano: req.body.regPlano || obraDB.regPlano,          
+        regPlano: req.body.regPlano || obraDB.regPlano, 
+        cliente: req.body.cliente || obraDB.cliente,         
         activo: req.body.activo || obraDB.activo       
+    }
+
+    const cliente = await Cliente.findOne({_id:obra.cliente})
+    .then(clienteDB => {
+        console.log(clienteDB);
+        return clienteDB;
+    }).catch(err => {
+        console.log(err);
+        return undefined;
+    })
+
+    if(!cliente){
+        return res.json({
+            ok:false,
+            mensaje:`Ha existido un error con el ciente _id: ${ obra.cliente }`
+        });
     }
 
     // Se entrega la información para actualizar 
@@ -185,7 +218,7 @@ obraRoutes.post('/update', (req: any, res: Response) => {
             });
         }
 
-        const tokenUser = Token.getJwtToken({
+        const tokenObra = Token.getJwtToken({
             _id: obraDB._id,                   
             identObra: obraDB.identObra,
             nombreObra: obraDB.nombreObra,
@@ -193,12 +226,13 @@ obraRoutes.post('/update', (req: any, res: Response) => {
             fechaInicio: obraDB.fechaInicio,
             fechaFin: obraDB.fechaFin,
             regPlano: obraDB.regPlano,
+            cliente: obraDB.cliente,
             activo: obraDB.activo                       
 });
 
         res.json({
             ok: true,
-            token: tokenUser
+            token: tokenObra
         });
 
     });  
