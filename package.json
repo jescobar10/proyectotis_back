@@ -6,6 +6,7 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "start": "node dist/index",
+        "build": "npm build",
         "heroku-postbuild": "npm run build"
     },
     "author": "Juan David Escobar",
