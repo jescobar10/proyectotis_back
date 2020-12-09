@@ -42,7 +42,7 @@ avanceObraRoutes.get('/:id', (req: Request, res: Response ) => {
         if(!avanceObraDB){
             return res.json({
                 ok: false,
-                mensaje: `No existe avance de obra con la identificación ${id}`
+                mensaje: `El avance de obra con identificacion ${id} no esta activo`
             });
         }
 
@@ -75,7 +75,6 @@ avanceObraRoutes.get('/:id', (req: Request, res: Response ) => {
     })
 
 });
-
 
 //Crear Avance Obra
 avanceObraRoutes.post('/', [verificaToken], (req: any, res: Response) => {

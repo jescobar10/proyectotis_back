@@ -45,7 +45,7 @@ avanceObraRoutes.get('/:id', (req, res) => {
         if (!avanceObraDB) {
             return res.json({
                 ok: false,
-                mensaje: `No existe avance de obra con la identificación ${id}`
+                mensaje: `El avance de obra con identificacion ${id} no esta activo`
             });
         }
         if (avanceObraDB.activo) {

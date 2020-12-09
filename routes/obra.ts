@@ -34,7 +34,6 @@ obraRoutes.get('/', async ( req: Request, res: Response ) =>{
     });
 });
 
-
 //Listar la obra por id
 obraRoutes.get('/:id', async ( req: Request, res: Response ) =>{
     let id = req.params.id;
@@ -78,7 +77,6 @@ obraRoutes.get('/:id', async ( req: Request, res: Response ) =>{
     });
    
 });
-
 
 //Listar las obras para drop
 obraRoutes.get('/listarObras', async ( req: Request, res: Response ) =>{
