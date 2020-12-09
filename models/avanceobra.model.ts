@@ -39,7 +39,12 @@ const avanceObraSchema = new Schema({
 
     created: {
         type: Date
+    },
+
+    activo: {
+        type: Boolean
     }
+
 
 });
 
@@ -57,6 +62,7 @@ interface IAvanceObra extends Document {
     plano: String;
     usuario: String;
     created: Date;
+    activo: boolean;
 }
 
 export const AvanceObra = model<IAvanceObra>('AvanceObra', avanceObraSchema);

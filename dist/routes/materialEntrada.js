@@ -1,10 +1,9 @@
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
@@ -18,13 +17,13 @@ const token_1 = __importDefault(require("../classes/token"));
 const material_model_1 = require("../models/material.model");
 const proveedor_model_1 = require("../models/proveedor.model");
 const materialEntradaRoutes = express_1.Router();
-materialEntradaRoutes.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+materialEntradaRoutes.get('/', (req, res) => __awaiter(this, void 0, void 0, function* () {
     let pagina = Number(req.query.pagina) || 1;
     let skip = pagina - 1;
     skip = skip * 10;
     const body = req.body;
     const entradas = yield materialentrada_model_1.MaterialEntrada.find()
-        .sort({ Fecha: 1 })
+        .sort({ fecha: 1 })
         .skip(skip)
         .limit(10)
         .exec();
@@ -34,7 +33,7 @@ materialEntradaRoutes.get('/', (req, res) => __awaiter(void 0, void 0, void 0, f
         entradas
     });
 }));
-materialEntradaRoutes.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+materialEntradaRoutes.get('/:id', (req, res) => __awaiter(this, void 0, void 0, function* () {
     let id = req.params.id;
     yield materialentrada_model_1.MaterialEntrada.findOne({ id }, (err, entradaDB) => {
         if (err)
@@ -57,7 +56,7 @@ materialEntradaRoutes.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0
         });
     });
 }));
-materialEntradaRoutes.post('/create', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+materialEntradaRoutes.post('/create', (req, res) => __awaiter(this, void 0, void 0, function* () {
     const entrada = {
         idMaterial: req.body.idMaterial,
         idProveedor: req.body.idProveedor,
@@ -122,7 +121,7 @@ materialEntradaRoutes.post('/create', (req, res) => __awaiter(void 0, void 0, vo
         });
     });
 }));
-materialEntradaRoutes.post('/update', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+materialEntradaRoutes.post('/update', (req, res) => __awaiter(this, void 0, void 0, function* () {
     let entradaBD = yield materialentrada_model_1.MaterialEntrada.findOne({ _id: req.body._id })
         .then(entryDB => {
         console.log(entryDB);
