@@ -29,7 +29,7 @@ export default class FileSystem {
                     //No se puede mover
                     reject(err);
                 } else {
-                    resolve();
+                    resolve(file);
                 }
     
             });

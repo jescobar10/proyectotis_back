@@ -176,7 +176,7 @@ trabajadorRoutes.post('/update', (req: any, res: Response) => {
     
             res.json({
                 ok: true,
-                mensaje: `Se ha actualizado el usuario con documento ${trabajador.documento}`,
+                mensaje: `Se ha actualizado el trabajador con documento ${trabajador.documento}`,
                 token: tokenTrabajador
             });
     
