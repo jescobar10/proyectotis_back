@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MaterialSalida = void 0;
 const mongoose_1 = require("mongoose");
 const materialSalidaSchema = new mongoose_1.Schema({
     idMaterial: {

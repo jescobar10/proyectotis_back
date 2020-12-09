@@ -36,6 +36,44 @@ avanceObraRoutes.get('/', (req, res) => __awaiter(this, void 0, void 0, function
         avanceObras
     });
 }));
+//Listar avance de obra por id
+avanceObraRoutes.get('/:id', (req, res) => {
+    let id = req.params.id;
+    avanceobra_model_1.AvanceObra.findOne({ _id: id }, (err, avanceObraDB) => {
+        if (err)
+            throw err;
+        if (!avanceObraDB) {
+            return res.json({
+                ok: false,
+                mensaje: `El avance de obra con identificacion ${id} no esta activo`
+            });
+        }
+        if (avanceObraDB.activo) {
+            let avanceObra = {
+                _id: avanceObraDB._id,
+                idObra: avanceObraDB.idObra,
+                fechaAvance: avanceObraDB.fechaAvance,
+                descripcion: avanceObraDB.descripcion,
+                foto: avanceObraDB.foto,
+                coords: avanceObraDB.coords,
+                plano: avanceObraDB.plano,
+                usuario: avanceObraDB.usuario,
+                created: avanceObraDB.created,
+                activo: avanceObraDB.activo
+            };
+            res.json({
+                ok: true,
+                AvanceObra: avanceobra_model_1.AvanceObra
+            });
+        }
+        else {
+            return res.json({
+                ok: false,
+                mensaje: `La Obra con identificacion ${id} no esta activa`
+            });
+        }
+    });
+});
 //Crear Avance Obra
 avanceObraRoutes.post('/', [autenticacion_1.verificaToken], (req, res) => {
     //avanceObraRoutes.post('/', [verificaToken], (req: any, res: Response) => {
