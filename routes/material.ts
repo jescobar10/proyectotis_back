@@ -32,7 +32,7 @@ materialRoutes.get('/', async ( req: Request, res: Response ) =>{
 //Listar los materiales paginadas
 materialRoutes.get('/:id', async ( req: Request, res: Response ) =>{
     let id = req.params.id;
-    await Material.findOne({_id:id}, (err,materialDB) => {
+    await Material.findOne({codigo:id}, (err,materialDB) => {
         if (err)
             throw err;
 
