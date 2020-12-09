@@ -56,7 +56,7 @@ interface obra {
     fechaInicio: Date;
     fechaFin: Date;
     regPlano: String;
-    cliente: String;
+    //cliente: String;
     activo: Boolean;         
 }
 

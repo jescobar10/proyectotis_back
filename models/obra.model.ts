@@ -35,11 +35,11 @@ const obraSchema = new Schema( {
    }],
 
    //Relacion Cliente
-   cliente: {
-       type: Schema.Types.ObjectId,
-       ref: 'Cliente',
-       required: [true, 'Se debe vincular un cliente a la obra']
-   },
+//    cliente: {
+//        type: Schema.Types.ObjectId,
+//        ref: 'Cliente',
+//        required: [true, 'Se debe vincular un cliente a la obra']
+//    },
 
    activo: {
     type: Boolean
@@ -63,7 +63,7 @@ interface Iobra extends Document {
     fechaInicio: Date;
     fechaFin: Date;
     regPlano: String;
-    cliente: String;
+    //cliente: String;
     activo: Boolean;
 }
 

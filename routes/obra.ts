@@ -57,23 +57,23 @@ obraRoutes.post('/', [verificaToken], async( req: any, res: Response ) =>{
 
     const body = req.body;
     body.usuario = req.usuario._id;
-    const clienteId = body.cliente;
+    // const clienteId = body.cliente;
 
-    const cliente = await Cliente.findOne({_id:clienteId})
-    .then(clienteDB => {
-        console.log(clienteDB);
-        return clienteDB;
-    }).catch(err => {
-        console.log(err);
-        return undefined;
-    })
+    // const cliente = await Cliente.findOne({_id:clienteId})
+    // .then(clienteDB => {
+    //     console.log(clienteDB);
+    //     return clienteDB;
+    // }).catch(err => {
+    //     console.log(err);
+    //     return undefined;
+    // })
 
-    if(!cliente){
-        return res.json({
-            ok:false,
-            mensaje:`Ha existido un error con el ciente _id: ${ clienteId }`
-        });
-    }
+    // if(!cliente){
+    //     return res.json({
+    //         ok:false,
+    //         mensaje:`Ha existido un error con el ciente _id: ${ clienteId }`
+    //     });
+    // }
        
     //Para subir varios archivos 
     const pdfs =  fileSystem.imagenesDeTempHaciaModulo( req.usuario._id, "obra" );
@@ -186,28 +186,28 @@ obraRoutes.post('/update', (req: any, res: Response) => {
         fechaInicio: req.body.fechaInicio || obraDB.fechaInicio,
         fechaFin: req.body.fechaFin || obraDB.fechaFin,
         regPlano: req.body.regPlano || obraDB.regPlano, 
-        cliente: req.body.cliente || obraDB.cliente,         
+        //cliente: req.body.cliente || obraDB.cliente,         
         activo: req.body.activo || obraDB.activo       
     }
 
-    const cliente = await Cliente.findOne({_id:obra.cliente})
-    .then(clienteDB => {
-        console.log(clienteDB);
-        return clienteDB;
-    }).catch(err => {
-        console.log(err);
-        return undefined;
-    })
+    // const cliente = await Cliente.findOne({_id:obra.cliente})
+    // .then(clienteDB => {
+    //     console.log(clienteDB);
+    //     return clienteDB;
+    // }).catch(err => {
+    //     console.log(err);
+    //     return undefined;
+    // })
 
-    if(!cliente){
-        return res.json({
-            ok:false,
-            mensaje:`Ha existido un error con el ciente _id: ${ obra.cliente }`
-        });
-    }
+    // if(!cliente){
+    //     return res.json({
+    //         ok:false,
+    //         mensaje:`Ha existido un error con el ciente _id: ${ obra.cliente }`
+    //     });
+    // }
 
     // Se entrega la información para actualizar 
-    Obra.findByIdAndUpdate( req.obra._id, obra, { new: true }, ( err, obraDB) => {
+    Obra.findByIdAndUpdate( req.body._id, obra, { new: true }, ( err, obraDB) => {
         
         if( err ) throw err;
 
@@ -226,7 +226,7 @@ obraRoutes.post('/update', (req: any, res: Response) => {
             fechaInicio: obraDB.fechaInicio,
             fechaFin: obraDB.fechaFin,
             regPlano: obraDB.regPlano,
-            cliente: obraDB.cliente,
+            //cliente: obraDB.cliente,
             activo: obraDB.activo                       
 });
 
@@ -237,41 +237,6 @@ obraRoutes.post('/update', (req: any, res: Response) => {
 
     });  
 
-    });   
-});
-
-//Eliminar Obra
-//En este caso no se eliminara el registro si no que se pondra en un estado de inactivo
-obraRoutes.post('/delete', (req: any, res: Response) => {
-    //userRoutes.post('/delete', verificaToken,  (req: any, res: Response) => {
-
-    const obra = {
-        _id: req.body._id || req.obra._id,        
-        activo: req.body.activo || req.obra.activo
-    }
-
-    // Se entrega la información para actualizar el campo activo a false
-    Obra.findByIdAndUpdate( req.trabajador._id, obra, { new: true }, ( err, obraDB) => {
-        
-        if( err ) throw err;
-
-        if( !obraDB  ) {
-            return res.json({
-                ok: false,
-                mensaje: 'No existe una obra con ese ID'
-            });
-        }
-
-        const tokenUser = Token.getJwtToken({
-            _id: obraDB._id,
-                    documento: obraDB.identObra,
-                    activo: false  
-        });
-
-        res.json({
-            ok: true,
-            token: tokenUser
-        });
     });   
 });
 

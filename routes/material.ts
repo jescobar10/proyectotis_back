@@ -106,7 +106,7 @@ materialRoutes.post('/update', (req: any, res: Response) => {
     }
 
     // Se entrega la información para actualizar 
-    Material.findByIdAndUpdate( req.obra._id, material, { new: true }, ( err, materialDB) => {
+    Material.findByIdAndUpdate( req.body._id, material, { new: true }, ( err, materialDB) => {
         
         if( err ) throw err;
 
