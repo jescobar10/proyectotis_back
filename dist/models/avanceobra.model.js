@@ -31,6 +31,9 @@ const avanceObraSchema = new mongoose_1.Schema({
     },
     created: {
         type: Date
+    },
+    activo: {
+        type: Boolean
     }
 });
 exports.AvanceObra = mongoose_1.model('AvanceObra', avanceObraSchema);

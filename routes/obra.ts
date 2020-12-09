@@ -34,6 +34,52 @@ obraRoutes.get('/', async ( req: Request, res: Response ) =>{
     });
 });
 
+
+//Listar la obra por id
+obraRoutes.get('/:id', async ( req: Request, res: Response ) =>{
+    let id = req.params.id;
+
+    Obra.findOne({_id:id}, (err, obraDB) => {
+        if(err)
+           throw err;
+
+           if(!obraDB){
+            return res.json({
+                ok: false,
+                mensaje: `No existe Obra con identificacion ${id}`
+            });
+           }
+
+           if( obraDB.activo ) {
+
+            let obra = {
+                _id: obraDB._id,
+                identObra: obraDB.identObra,
+                nombreObra: obraDB.nombreObra,
+                descripcion:  obraDB.descripcion,
+                fechaInicio: obraDB.fechaInicio,
+                fechaFin: obraDB.fechaFin,
+                regPlano: obraDB.regPlano,
+                activo: obraDB.activo
+            };
+            
+            res.json ({
+                ok: true,
+                obra
+              });
+
+           }else {
+            return res.json({
+                ok: false,
+                mensaje: `La Obra con identificacion ${id} no esta activa`
+            });
+        }      
+
+    });
+   
+});
+
+
 //Listar las obras para drop
 obraRoutes.get('/listarObras', async ( req: Request, res: Response ) =>{
   
@@ -122,6 +168,7 @@ obraRoutes.post('/uploadpdf', [ verificaToken ], async (req: any, res: Response)
         file: file.mimetype
     });
 });
+
 
 obraRoutes.get('/pdf/:obraid/:pdf', (req: any, res: Response ) => {
 

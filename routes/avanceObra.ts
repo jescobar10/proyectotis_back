@@ -1,4 +1,4 @@
-import { Router, Response } from 'express';
+import { Router, Request, Response } from 'express';
 import { verificaToken } from '../middlewares/autenticacion';
 import { AvanceObra } from '../models/avanceobra.model';
 import { FileUpload } from '../interfaces/file-upload';
@@ -28,6 +28,51 @@ avanceObraRoutes.get('/', async (req: any, res: Response) => {
         pagina,
         avanceObras
     });
+
+});
+
+//Listar avance de obra por id
+avanceObraRoutes.get('/:id', (req: Request, res: Response ) => {
+    let id = req.params.id;
+
+    AvanceObra.findOne({_id:id}, (err, avanceObraDB ) => {
+        if(err)
+        throw err;
+
+        if(!avanceObraDB){
+            return res.json({
+                ok: false,
+                mensaje: `No existe avance de obra con la identificación ${id}`
+            });
+        }
+
+        if(avanceObraDB.activo) {
+
+            let avanceObra = {
+                _id: avanceObraDB._id,
+                idObra: avanceObraDB.idObra,
+                fechaAvance: avanceObraDB.fechaAvance,
+                descripcion: avanceObraDB.descripcion,
+                foto: avanceObraDB.foto,
+                coords: avanceObraDB.coords,
+                plano: avanceObraDB.plano,
+                usuario: avanceObraDB.usuario,
+                created: avanceObraDB.created,
+                activo: avanceObraDB.activo
+            };
+
+            res.json ({
+                ok: true,
+                AvanceObra
+              });
+
+           }else {
+            return res.json({
+                ok: false,
+                mensaje: `La Obra con identificacion ${id} no esta activa`
+            });            
+        }
+    })
 
 });
 
@@ -67,6 +112,10 @@ avanceObraRoutes.post('/', [verificaToken], (req: any, res: Response) => {
 ///Se definen las rutas o servicios para subir archivos (Imagenes / pdf)
 avanceObraRoutes.post('/uploadimg', [ verificaToken ], async (req: any, res: Response) =>  {
    
+    console.log('Back Archivos Subidos : ' + req.files );
+    console.log('Back Archivos Subidos : ' + req.files.image );
+    console.log('Back Archivos Req : ' + req.image );
+    
     //Se valida si viene algun archivo 
     if( !req.files ) {
         return res.status(400).json({
