@@ -29,6 +29,38 @@ materialRoutes.get('/', async ( req: Request, res: Response ) =>{
     });
 });
 
+//Listar los materiales paginadas
+materialRoutes.get('/:id', async ( req: Request, res: Response ) =>{
+    let id = req.params.id;
+    await Material.findOne({_id:id}, (err,materialDB) => {
+        if (err)
+            throw err;
+
+        if(!materialDB){
+            return res.json({
+                ok: false,
+                mensaje: `No existe un material registrado con el id ${ id }`
+            });
+        }
+
+        const material = {               
+            codigo         : materialDB.codigo,
+            referencia     : materialDB.referencia,
+            unidadMedida   : materialDB.unidadMedida,
+            precio         : materialDB.precio,
+            cantidad       : materialDB.cantidad,
+            proveedor      : materialDB.proveedor,
+            activo         : materialDB.activo
+        };
+
+        return res.json({
+            ok: true,
+            material
+        })
+    });
+});
+
+
 //Servicio Crear Materiales
 materialRoutes.post('/create', ( req: Request, res: Response ) =>{
 
