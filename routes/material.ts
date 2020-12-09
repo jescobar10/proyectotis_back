@@ -1,5 +1,6 @@
 import { Router, Request, Response  } from "express";
 import { Material } from '../models/material.model';
+import { Proveedor } from '../models/proveedor.model';
 import Token from '../classes/token';
 
 const materialRoutes = Router();
@@ -32,32 +33,43 @@ materialRoutes.get('/', async ( req: Request, res: Response ) =>{
 //Listar los materiales paginadas
 materialRoutes.get('/:id', async ( req: Request, res: Response ) =>{
     let id = req.params.id;
-    await Material.findOne({codigo:id}, (err,materialDB) => {
-        if (err)
-            throw err;
-
-        if(!materialDB){
-            return res.json({
-                ok: false,
-                mensaje: `No existe un material registrado con el id ${ id }`
-            });
-        }
-
-        const material = {               
-            codigo         : materialDB.codigo,
-            referencia     : materialDB.referencia,
-            unidadMedida   : materialDB.unidadMedida,
-            precio         : materialDB.precio,
-            cantidad       : materialDB.cantidad,
-            proveedor      : materialDB.proveedor,
-            activo         : materialDB.activo
-        };
-
-        return res.json({
-            ok: true,
-            material
-        })
+    let material = await Material.findOne({codigo:id})
+    .then(materialDB => {
+        console.log(materialDB);
+        return materialDB;
+    }).catch(err => {
+        console.log(err);
+        return undefined;
     });
+
+    if(!material){
+        return res.json({
+            ok:false,
+            mensaje:`Ha existido un error con el material _id ${ id }`
+        });
+    }
+
+    let proveedor = await Proveedor.findOne({_id:material.proveedor})
+    .then(proveedorDB => {
+        console.log(proveedorDB);
+        return proveedorDB;
+    }).catch(err => {
+        console.log(err);
+        return undefined;
+    });
+
+    if(!proveedor){
+        return res.json({
+            ok:false,
+            mensaje:`Ha existido un error con el proveedor _id ${ material.proveedor }`
+        });
+    }
+
+    return res.json({
+        ok: true,
+        material,
+        proveedor
+    })
 });
 
 
