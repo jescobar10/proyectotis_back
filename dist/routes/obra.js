@@ -39,42 +39,6 @@ obraRoutes.get('/', (req, res) => __awaiter(this, void 0, void 0, function* () {
         obras
     });
 }));
-//Listar la obra por id
-obraRoutes.get('/:id', (req, res) => __awaiter(this, void 0, void 0, function* () {
-    let id = req.params.id;
-    obra_model_1.Obra.findOne({ _id: id }, (err, obraDB) => {
-        if (err)
-            throw err;
-        if (!obraDB) {
-            return res.json({
-                ok: false,
-                mensaje: `No existe Obra con identificacion ${id}`
-            });
-        }
-        if (obraDB.activo) {
-            let obra = {
-                _id: obraDB._id,
-                identObra: obraDB.identObra,
-                nombreObra: obraDB.nombreObra,
-                descripcion: obraDB.descripcion,
-                fechaInicio: obraDB.fechaInicio,
-                fechaFin: obraDB.fechaFin,
-                regPlano: obraDB.regPlano,
-                activo: obraDB.activo
-            };
-            res.json({
-                ok: true,
-                obra
-            });
-        }
-        else {
-            return res.json({
-                ok: false,
-                mensaje: `La Obra con identificacion ${id} no esta activa`
-            });
-        }
-    });
-}));
 //Listar las obras para drop
 obraRoutes.get('/listarObras', (req, res) => __awaiter(this, void 0, void 0, function* () {
     const body = req.body;

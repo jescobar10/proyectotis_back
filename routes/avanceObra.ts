@@ -31,50 +31,7 @@ avanceObraRoutes.get('/', async (req: any, res: Response) => {
 
 });
 
-//Listar avance de obra por id
-avanceObraRoutes.get('/:id', (req: Request, res: Response ) => {
-    let id = req.params.id;
 
-    AvanceObra.findOne({_id:id}, (err, avanceObraDB ) => {
-        if(err)
-        throw err;
-
-        if(!avanceObraDB){
-            return res.json({
-                ok: false,
-                mensaje: `El avance de obra con identificacion ${id} no esta activo`
-            });
-        }
-
-        if(avanceObraDB.activo) {
-
-            let avanceObra = {
-                _id: avanceObraDB._id,
-                idObra: avanceObraDB.idObra,
-                fechaAvance: avanceObraDB.fechaAvance,
-                descripcion: avanceObraDB.descripcion,
-                foto: avanceObraDB.foto,
-                coords: avanceObraDB.coords,
-                plano: avanceObraDB.plano,
-                usuario: avanceObraDB.usuario,
-                created: avanceObraDB.created,
-                activo: avanceObraDB.activo
-            };
-
-            res.json ({
-                ok: true,
-                AvanceObra
-              });
-
-           }else {
-            return res.json({
-                ok: false,
-                mensaje: `La Obra con identificacion ${id} no esta activa`
-            });            
-        }
-    })
-
-});
 
 //Crear Avance Obra
 avanceObraRoutes.post('/', [verificaToken], (req: any, res: Response) => {
