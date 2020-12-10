@@ -26,6 +26,6 @@ class Token {
         });
     }
 }
+exports.default = Token;
 Token.seed = 'este-es-el-seed-de-mi-app-secreto';
 Token.caducidad = '30d';
-exports.default = Token;

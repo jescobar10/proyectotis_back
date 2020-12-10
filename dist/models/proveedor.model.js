@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Proveedor = void 0;
 const mongoose_1 = require("mongoose");
 const proveedorSchema = new mongoose_1.Schema({
     //Natural / Juridica

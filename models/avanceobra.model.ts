@@ -22,8 +22,16 @@ const avanceObraSchema = new Schema({
         type: String
     }],
 
-    coords: {
-        type: String //Latitud -12.88 , 14,6716 
+    // coords: {
+    //     type: String //Latitud -12.88 , 14,6716 
+    // },
+
+    latitude: {
+        type: String
+    },
+
+    longitude: {
+        type: String
     },
 
     plano: [{
@@ -58,7 +66,8 @@ interface IAvanceObra extends Document {
     fechaAvance: Date;
     descripcion: String;
     foto: String[];
-    coords: String;
+    latitude: String;
+    longitude: String;
     plano: String;
     usuario: String;
     created: Date;

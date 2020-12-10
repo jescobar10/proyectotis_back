@@ -1,9 +1,10 @@
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
@@ -17,7 +18,7 @@ const token_1 = __importDefault(require("../classes/token"));
 const material_model_1 = require("../models/material.model");
 const obra_model_1 = require("../models/obra.model");
 const materialSalidaRoutes = express_1.Router();
-materialSalidaRoutes.get('/', (req, res) => __awaiter(this, void 0, void 0, function* () {
+materialSalidaRoutes.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let pagina = Number(req.query.pagina) || 1;
     let skip = pagina - 1;
     skip = skip * 10;
@@ -33,7 +34,7 @@ materialSalidaRoutes.get('/', (req, res) => __awaiter(this, void 0, void 0, func
         entradas
     });
 }));
-materialSalidaRoutes.get('/:id', (req, res) => __awaiter(this, void 0, void 0, function* () {
+materialSalidaRoutes.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let id = req.params.id;
     yield materialsalida_model_1.MaterialSalida.findOne({ id }, (err, salidaDB) => {
         if (err)
@@ -56,7 +57,7 @@ materialSalidaRoutes.get('/:id', (req, res) => __awaiter(this, void 0, void 0, f
         });
     });
 }));
-materialSalidaRoutes.post('/create', (req, res) => __awaiter(this, void 0, void 0, function* () {
+materialSalidaRoutes.post('/create', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const salida = {
         idMaterial: req.body.idMaterial,
         idObra: req.body.idObra,
@@ -127,7 +128,7 @@ materialSalidaRoutes.post('/create', (req, res) => __awaiter(this, void 0, void 
         });
     });
 }));
-materialSalidaRoutes.post('/update', (req, res) => __awaiter(this, void 0, void 0, function* () {
+materialSalidaRoutes.post('/update', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let salidaBD = yield materialsalida_model_1.MaterialSalida.findOne({ _id: req.body._id })
         .then(departureDB => {
         console.log(departureDB);

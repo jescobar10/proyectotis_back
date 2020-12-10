@@ -17,7 +17,7 @@ avanceObraRoutes.get('/', async (req: any, res: Response) => {
     skip = skip * 10;
 
    const avanceObras = await AvanceObra.find()
-                                       .sort({ _id: -1 })
+                                       .sort({ _id: 1 })
                                        .skip( skip )
                                        .limit(10)
                                        .populate('usuario', '-password')
@@ -54,7 +54,8 @@ avanceObraRoutes.get('/:id', (req: Request, res: Response ) => {
                 fechaAvance: avanceObraDB.fechaAvance,
                 descripcion: avanceObraDB.descripcion,
                 foto: avanceObraDB.foto,
-                coords: avanceObraDB.coords,
+                latitude: avanceObraDB.latitude,
+                longitude: avanceObraDB.longitude,
                 plano: avanceObraDB.plano,
                 usuario: avanceObraDB.usuario,
                 created: avanceObraDB.created,

@@ -1,9 +1,10 @@
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
@@ -13,10 +14,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const material_model_1 = require("../models/material.model");
+const proveedor_model_1 = require("../models/proveedor.model");
 const token_1 = __importDefault(require("../classes/token"));
 const materialRoutes = express_1.Router();
 //Listar los materiales paginadas
-materialRoutes.get('/', (req, res) => __awaiter(this, void 0, void 0, function* () {
+materialRoutes.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     //Se solicita el numero de pagina , parametro opcional
     let pagina = Number(req.query.pagina) || 1;
     let skip = pagina - 1;
@@ -33,6 +35,43 @@ materialRoutes.get('/', (req, res) => __awaiter(this, void 0, void 0, function* 
         ok: true,
         pagina,
         materiales
+    });
+}));
+//Listar los materiales paginadas
+materialRoutes.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    let id = req.params.id;
+    let material = yield material_model_1.Material.findOne({ codigo: id })
+        .then(materialDB => {
+        console.log(materialDB);
+        return materialDB;
+    }).catch(err => {
+        console.log(err);
+        return undefined;
+    });
+    if (!material) {
+        return res.json({
+            ok: false,
+            mensaje: `Ha existido un error con el material _id ${id}`
+        });
+    }
+    let proveedor = yield proveedor_model_1.Proveedor.findOne({ _id: material.proveedor })
+        .then(proveedorDB => {
+        console.log(proveedorDB);
+        return proveedorDB;
+    }).catch(err => {
+        console.log(err);
+        return undefined;
+    });
+    if (!proveedor) {
+        return res.json({
+            ok: false,
+            mensaje: `Ha existido un error con el proveedor _id ${material.proveedor}`
+        });
+    }
+    return res.json({
+        ok: true,
+        material,
+        proveedor
     });
 }));
 //Servicio Crear Materiales
@@ -101,7 +140,7 @@ materialRoutes.post('/update', (req, res) => {
             activo: req.body.activo || materialDB.activo
         };
         // Se entrega la información para actualizar 
-        material_model_1.Material.findByIdAndUpdate(req.obra._id, material, { new: true }, (err, materialDB) => {
+        material_model_1.Material.findByIdAndUpdate(req.body._id, material, { new: true }, (err, materialDB) => {
             if (err)
                 throw err;
             if (!materialDB) {

@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Obra = void 0;
 const mongoose_1 = require("mongoose");
 const obraSchema = new mongoose_1.Schema({
     identObra: {
@@ -26,6 +27,12 @@ const obraSchema = new mongoose_1.Schema({
     regPlano: [{
             type: String
         }],
+    //Relacion Cliente
+    //    cliente: {
+    //        type: Schema.Types.ObjectId,
+    //        ref: 'Cliente',
+    //        required: [true, 'Se debe vincular un cliente a la obra']
+    //    },
     activo: {
         type: Boolean
     },

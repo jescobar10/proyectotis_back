@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.MaterialSalida = void 0;
 const mongoose_1 = require("mongoose");
 const materialSalidaSchema = new mongoose_1.Schema({
     idMaterial: {
@@ -13,7 +14,7 @@ const materialSalidaSchema = new mongoose_1.Schema({
         required: [true, "Debe estar ligada a una obra la salida de material que se desea registrar"]
     },
     fecha: {
-        type: Date,
+        type: String,
         required: [true, "Se debe registrar la fecha de la salida del material"]
     },
     cantidad: {

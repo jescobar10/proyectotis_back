@@ -1,5 +1,5 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function(mod) {
+var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -21,6 +21,7 @@ const materialEntrada_1 = __importDefault(require("./routes/materialEntrada"));
 const materialSalida_1 = __importDefault(require("./routes/materialSalida"));
 const trabajador_obra_1 = __importDefault(require("./routes/trabajador_obra"));
 const server = new server_1.default();
+const port = process.env.PORT || 3001;
 //Body Parse : Para interprestar los post, get, etc
 server.app.use(body_parser_1.default.urlencoded({ extended: true }));
 server.app.use(body_parser_1.default.json());
@@ -44,9 +45,7 @@ server.app.use('/trabajadorobra', trabajador_obra_1.default);
 //mongodb+srv://proyectotis_back:<password>@clustertis.jurio.mongodb.net/<dbname>?retryWrites=true&w=majority
 //mongoose.connect('mongodb://localhost:27017/bdtis',  
 mongoose_1.default.connect('mongodb+srv://proyectotis_back:Tis2020@clustertis.jurio.mongodb.net/<bdtis>?retryWrites=true&w=majority', {
-    useNewUrlParser: true,
-    useCreateIndex: true,
-    useUnifiedTopology: true
+    useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true
 }, (err) => {
     if (err)
         throw err;
@@ -54,7 +53,7 @@ mongoose_1.default.connect('mongodb+srv://proyectotis_back:Tis2020@clustertis.ju
 });
 //Se levanta express
 server.start(() => {
-    console.log(`Servidor corriendo en puerto ${server.port}`);
+    console.log(`Servidor corriendo en puerto ${port}`);
 });
 // const MongoClient = require('mongodb').MongoClient;
 // const uri = "mongodb+srv://proyectotis_back:<password>@clustertis.jurio.mongodb.net/<dbname>?retryWrites=true&w=majority";

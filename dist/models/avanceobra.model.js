@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.AvanceObra = void 0;
 const mongoose_1 = require("mongoose");
 const avanceObraSchema = new mongoose_1.Schema({
     idObra: {
@@ -17,8 +18,14 @@ const avanceObraSchema = new mongoose_1.Schema({
     foto: [{
             type: String
         }],
-    coords: {
-        type: String //Latitud -12.88 , 14,6716 
+    // coords: {
+    //     type: String //Latitud -12.88 , 14,6716 
+    // },
+    latitude: {
+        type: String
+    },
+    longitude: {
+        type: String
     },
     plano: [{
             type: String

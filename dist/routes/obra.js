@@ -1,9 +1,10 @@
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
@@ -20,7 +21,7 @@ const obraRoutes = express_1.Router();
 //Se define el filesystem que va a permitir subir los archivos img / pdf
 const fileSystem = new file_system_1.default();
 //Listar las obras paginadas
-obraRoutes.get('/', (req, res) => __awaiter(this, void 0, void 0, function* () {
+obraRoutes.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     //Se solicita el numero de pagina , parametro opcional
     let pagina = Number(req.query.pagina) || 1;
     let skip = pagina - 1;
@@ -40,7 +41,7 @@ obraRoutes.get('/', (req, res) => __awaiter(this, void 0, void 0, function* () {
     });
 }));
 //Listar la obra por id
-obraRoutes.get('/:id', (req, res) => __awaiter(this, void 0, void 0, function* () {
+obraRoutes.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let id = req.params.id;
     obra_model_1.Obra.findOne({ _id: id }, (err, obraDB) => {
         if (err)
@@ -76,7 +77,7 @@ obraRoutes.get('/:id', (req, res) => __awaiter(this, void 0, void 0, function* (
     });
 }));
 //Listar las obras para drop
-obraRoutes.get('/listarObras', (req, res) => __awaiter(this, void 0, void 0, function* () {
+obraRoutes.get('/listarObras', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const body = req.body;
     const obras = yield obra_model_1.Obra.find()
         //Muestra ordenado por nombre de la obra
@@ -87,17 +88,32 @@ obraRoutes.get('/listarObras', (req, res) => __awaiter(this, void 0, void 0, fun
     });
 }));
 //Servicio Crear Obras
-obraRoutes.post('/', [autenticacion_1.verificaToken], (req, res) => {
+obraRoutes.post('/', [autenticacion_1.verificaToken], (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     console.log('Ingreso al guardar obra');
     const body = req.body;
     body.usuario = req.usuario._id;
+    // const clienteId = body.cliente;
+    // const cliente = await Cliente.findOne({_id:clienteId})
+    // .then(clienteDB => {
+    //     console.log(clienteDB);
+    //     return clienteDB;
+    // }).catch(err => {
+    //     console.log(err);
+    //     return undefined;
+    // })
+    // if(!cliente){
+    //     return res.json({
+    //         ok:false,
+    //         mensaje:`Ha existido un error con el ciente _id: ${ clienteId }`
+    //     });
+    // }
     //Para subir varios archivos 
     const pdfs = fileSystem.imagenesDeTempHaciaModulo(req.usuario._id, "obra");
     console.log('Nombre de Pdf cargado: ' + pdfs);
     body.regPlano = pdfs;
     console.log('objeto enviado: ' + body);
     //Se crea el obra en Base de datos
-    obra_model_1.Obra.create(body).then((obraDB) => __awaiter(this, void 0, void 0, function* () {
+    obra_model_1.Obra.create(body).then((obraDB) => __awaiter(void 0, void 0, void 0, function* () {
         yield obraDB.populate('usuario', '-password').execPopulate();
         res.json({
             ok: true,
@@ -109,9 +125,9 @@ obraRoutes.post('/', [autenticacion_1.verificaToken], (req, res) => {
             err
         });
     });
-});
+}));
 ///Se definen las rutas o servicios para subir archivos ( pdf)
-obraRoutes.post('/uploadpdf', [autenticacion_1.verificaToken], (req, res) => __awaiter(this, void 0, void 0, function* () {
+obraRoutes.post('/uploadpdf', [autenticacion_1.verificaToken], (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     console.log('Back Archivos Subidos : ' + req.files);
     console.log('Back Archivos Req : ' + req.pdf);
     //Se valida si viene algun archivo 
@@ -150,7 +166,7 @@ obraRoutes.get('/pdf/:obraid/:pdf', (req, res) => {
 obraRoutes.post('/update', (req, res) => {
     //userRoutes.post('/update', verificaToken,  (req: any, res: Response) => {
     //Buscamos que exista la obra
-    obra_model_1.Obra.findById({ _id: req.body._id }, (err, obraDB) => {
+    obra_model_1.Obra.findById({ _id: req.body._id }, (err, obraDB) => __awaiter(void 0, void 0, void 0, function* () {
         // Si no se puede procesar el query se arroja un error
         if (err)
             throw err;
@@ -175,10 +191,25 @@ obraRoutes.post('/update', (req, res) => {
             fechaInicio: req.body.fechaInicio || obraDB.fechaInicio,
             fechaFin: req.body.fechaFin || obraDB.fechaFin,
             regPlano: req.body.regPlano || obraDB.regPlano,
+            //cliente: req.body.cliente || obraDB.cliente,         
             activo: req.body.activo || obraDB.activo
         };
+        // const cliente = await Cliente.findOne({_id:obra.cliente})
+        // .then(clienteDB => {
+        //     console.log(clienteDB);
+        //     return clienteDB;
+        // }).catch(err => {
+        //     console.log(err);
+        //     return undefined;
+        // })
+        // if(!cliente){
+        //     return res.json({
+        //         ok:false,
+        //         mensaje:`Ha existido un error con el ciente _id: ${ obra.cliente }`
+        //     });
+        // }
         // Se entrega la información para actualizar 
-        obra_model_1.Obra.findByIdAndUpdate(req.obra._id, obra, { new: true }, (err, obraDB) => {
+        obra_model_1.Obra.findByIdAndUpdate(req.body._id, obra, { new: true }, (err, obraDB) => {
             if (err)
                 throw err;
             if (!obraDB) {
@@ -187,7 +218,7 @@ obraRoutes.post('/update', (req, res) => {
                     mensaje: 'No existe una obra con ese ID'
                 });
             }
-            const tokenUser = token_1.default.getJwtToken({
+            const tokenObra = token_1.default.getJwtToken({
                 _id: obraDB._id,
                 identObra: obraDB.identObra,
                 nombreObra: obraDB.nombreObra,
@@ -195,43 +226,15 @@ obraRoutes.post('/update', (req, res) => {
                 fechaInicio: obraDB.fechaInicio,
                 fechaFin: obraDB.fechaFin,
                 regPlano: obraDB.regPlano,
+                //cliente: obraDB.cliente,
                 activo: obraDB.activo
             });
             res.json({
                 ok: true,
-                token: tokenUser
+                token: tokenObra
             });
         });
-    });
-});
-//Eliminar Obra
-//En este caso no se eliminara el registro si no que se pondra en un estado de inactivo
-obraRoutes.post('/delete', (req, res) => {
-    //userRoutes.post('/delete', verificaToken,  (req: any, res: Response) => {
-    const obra = {
-        _id: req.body._id || req.obra._id,
-        activo: req.body.activo || req.obra.activo
-    };
-    // Se entrega la información para actualizar el campo activo a false
-    obra_model_1.Obra.findByIdAndUpdate(req.trabajador._id, obra, { new: true }, (err, obraDB) => {
-        if (err)
-            throw err;
-        if (!obraDB) {
-            return res.json({
-                ok: false,
-                mensaje: 'No existe una obra con ese ID'
-            });
-        }
-        const tokenUser = token_1.default.getJwtToken({
-            _id: obraDB._id,
-            documento: obraDB.identObra,
-            activo: false
-        });
-        res.json({
-            ok: true,
-            token: tokenUser
-        });
-    });
+    }));
 });
 //Se exporta la ruta de las obras
 exports.default = obraRoutes;

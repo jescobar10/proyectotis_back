@@ -1,9 +1,10 @@
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
@@ -19,13 +20,13 @@ const avanceObraRoutes = express_1.Router();
 //Se define el filesystem que va a permitir subor los archivos img / pdf
 const fileSystem = new file_system_1.default();
 //Obtener avance Obra Paginados
-avanceObraRoutes.get('/', (req, res) => __awaiter(this, void 0, void 0, function* () {
+avanceObraRoutes.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     //Paginación
     let pagina = Number(req.query.pagina) || 1;
     let skip = pagina - 1;
     skip = skip * 10;
     const avanceObras = yield avanceobra_model_1.AvanceObra.find()
-        .sort({ _id: -1 })
+        .sort({ _id: 1 })
         .skip(skip)
         .limit(10)
         .populate('usuario', '-password')
@@ -55,7 +56,8 @@ avanceObraRoutes.get('/:id', (req, res) => {
                 fechaAvance: avanceObraDB.fechaAvance,
                 descripcion: avanceObraDB.descripcion,
                 foto: avanceObraDB.foto,
-                coords: avanceObraDB.coords,
+                latitude: avanceObraDB.latitude,
+                longitude: avanceObraDB.longitude,
                 plano: avanceObraDB.plano,
                 usuario: avanceObraDB.usuario,
                 created: avanceObraDB.created,
@@ -84,7 +86,7 @@ avanceObraRoutes.post('/', [autenticacion_1.verificaToken], (req, res) => {
     const imagenes = fileSystem.imagenesDeTempHaciaModulo(req.usuario._id, "avanceObra");
     //se pasa la imagen al cuerpo del avance de la obra
     body.foto = imagenes;
-    avanceobra_model_1.AvanceObra.create(body).then((avanceObraDB) => __awaiter(this, void 0, void 0, function* () {
+    avanceobra_model_1.AvanceObra.create(body).then((avanceObraDB) => __awaiter(void 0, void 0, void 0, function* () {
         //Parte que envia todo el objeto usaurio no solo el Id
         yield avanceObraDB.populate('usuario', '-password').execPopulate();
         // await avanceObraDB.populate('obra').execPopulate();
@@ -97,7 +99,7 @@ avanceObraRoutes.post('/', [autenticacion_1.verificaToken], (req, res) => {
     });
 });
 ///Se definen las rutas o servicios para subir archivos (Imagenes / pdf)
-avanceObraRoutes.post('/uploadimg', [autenticacion_1.verificaToken], (req, res) => __awaiter(this, void 0, void 0, function* () {
+avanceObraRoutes.post('/uploadimg', [autenticacion_1.verificaToken], (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     console.log('Back Archivos Subidos : ' + req.files);
     console.log('Back Archivos Subidos : ' + req.files.image);
     console.log('Back Archivos Req : ' + req.image);
@@ -138,7 +140,7 @@ avanceObraRoutes.get('/imagen/:avanceObraid/:img', (req, res) => {
 // ---------------------------------------------------------------------------------------------------------------
 // ---------------------------------------------------------------------------------------------------------------
 ///Se definen las rutas o servicios para subir archivos (pdf)
-avanceObraRoutes.post('/uploadpdf', [autenticacion_1.verificaToken], (req, res) => __awaiter(this, void 0, void 0, function* () {
+avanceObraRoutes.post('/uploadpdf', [autenticacion_1.verificaToken], (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     //Se valida si viene algun archivo 
     if (!req.files) {
         return res.status(400).json({
